@@ -4,15 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">Checklist Equipamentos de Trabalho</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 <style>
 /* CSS GERAL */
-body { font-family: Arial, sans-serif; padding: 20px; margin:0; background-color: #2D2D2D; color:#F4F3F2; }
-h1 { color:#F4F3F2; margin-bottom: 20px; }
+body { 
+    font-family: Arial, sans-serif; 
+    /* AJUSTE PARA IOS: Aumentar o padding-top para deixar espaço para o seletor fixo */
+    padding: 20px; 
+    padding-top: 60px; /* Garante que o conteúdo não fica por baixo do seletor fixo */
+    margin:0; 
+    background-color: #2D2D2D; 
+    color:#F4F3F2; 
+    /* Melhorias de compatibilidade iOS */
+    -webkit-text-size-adjust: 100%; 
+    -webkit-tap-highlight-color: transparent;
+}
+/* Ajuste no <h1> para compensar o padding do body e manter o título no topo */
+h1 { 
+    color:#F4F3F2; 
+    margin-top: -40px; 
+    margin-bottom: 20px; 
+}
 
 /* SELETOR DE IDIOMA (Canto superior direito) */
 .language-selector {
-    position: absolute; 
-    top: 20px; 
+    position: absolute; /* Essencial para funcionar no iOS/Chrome */
+    top: 15px; 
     right: 20px; 
     z-index: 1000;
 }
@@ -24,9 +44,10 @@ h1 { color:#F4F3F2; margin-bottom: 20px; }
     color: #F4F3F2; 
     font-size: 16px; 
     font-weight: bold;
+    -webkit-appearance: menulist;
 }
 
-/* NOVOS CAMPOS (Cliente e Projeto) */
+/* CAMPOS DE INFORMAÇÃO */
 .project-info-container {
     margin-bottom: 20px;
     padding: 10px;
@@ -35,18 +56,18 @@ h1 { color:#F4F3F2; margin-bottom: 20px; }
     background-color: #333;
 }
 .input-group {
-    display: flex; /* Alinha label e input */
+    display: flex; 
     align-items: center;
     margin-bottom: 8px;
 }
 .input-group label {
-    width: 150px; /* Largura fixa para alinhar os inputs */
+    width: 150px; 
     font-weight: bold;
     flex-shrink: 0;
 }
 .info-input {
     flex-grow: 1;
-    max-width: 350px; /* Largura visual para simular 50 caracteres */
+    max-width: 350px; 
     padding: 6px;
     border-radius: 4px;
     border: 1px solid #777;
@@ -56,14 +77,55 @@ h1 { color:#F4F3F2; margin-bottom: 20px; }
 }
 
 /* ESTILOS DA TABELA */
-.table-container { overflow-x:auto; -webkit-overflow-scrolling: touch; }
-table { width:100%; border-collapse: collapse; min-width:700px; background-color:#3A3A3A; border-radius:8px; overflow:hidden; }
+.table-container { 
+    overflow-x:auto; 
+    -webkit-overflow-scrolling: touch; 
+}
+/* Foi adicionado um ID à tabela para facilitar a captura no PDF */
+#checklistTable { 
+    width:100%; 
+    border-collapse: collapse; 
+    min-width:700px; 
+    background-color:#3A3A3A; 
+    border-radius:8px; 
+    overflow:hidden; 
+}
 th, td { padding:8px; border:1px solid #555; vertical-align:top; word-wrap:break-word; }
 th { background-color:#4A4A4A; text-align:left; }
 .titulo-artigo { background-color:#555; font-weight:bold; }
 .pergunta textarea { width:100%; min-height:50px; background-color:#4A4A4A; color:#F4F3F2; border:1px solid #777; border-radius:4px; padding:6px; resize:vertical; box-sizing:border-box; }
-input[type=radio] { display:block; margin:0 auto; }
+/* Estilo para garantir que o radio button aparece bem na versão escura */
+input[type=radio] { 
+    display:block; 
+    margin:0 auto; 
+    accent-color: #28a745; /* Cor para visibilidade */
+}
 @media(max-width:768px){ th,td{ font-size:14px; } .pergunta textarea{ min-height:60px; } }
+
+/* ESTILO DO BOTÃO PDF */
+#pdfButton {
+    display: block;
+    width: 250px;
+    margin: 30px auto;
+    padding: 15px 20px;
+    background-color: #28a745; /* Verde */
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+#pdfButton:hover {
+    background-color: #218838;
+}
+
+/* CLASSE PARA ESCONDER ELEMENTOS QUE NÃO DEVEM APARECER NO PDF */
+.hide-on-pdf {
+    display: none !important;
+}
 </style>
 </head>
 <body>
@@ -76,29 +138,33 @@ input[type=radio] { display:block; margin:0 auto; }
     </select>
 </div>
 
-<h1 id="mainTitle">DISPOSIÇÕES MÍNIMAS GERAIS APLICÁVEIS AOS EQUIPAMENTOS DE TRABALHO - ANEXO I</h1>
+<div id="contentToPrint">
+    <h1 id="mainTitle">DISPOSIÇÕES MÍNIMAS GERAIS APLICÁVEIS AOS EQUIPAMENTOS DE TRABALHO - ANEXO I</h1>
 
-<div class="project-info-container">
-    <div class="input-group">
-        <label id="clientLabel" for="client-name">Nome do Cliente:</label>
-        <input type="text" id="client-name" maxlength="50" class="info-input">
+    <div class="project-info-container">
+        <div class="input-group">
+            <label id="clientLabel" for="client-name">Nome do Cliente:</label>
+            <input type="text" id="client-name" maxlength="50" class="info-input">
+        </div>
+        <div class="input-group">
+            <label id="projectLabel" for="project-name">Nome do Projeto:</label>
+            <input type="text" id="project-name" maxlength="50" class="info-input">
+        </div>
     </div>
-    <div class="input-group">
-        <label id="projectLabel" for="project-name">Nome do Projeto:</label>
-        <input type="text" id="project-name" maxlength="50" class="info-input">
+
+    <div class="table-container">
+    <table id="checklistTable">
+    <thead>
+    <tr id="tableHeaders">
+        <th>REQUISITO</th><th>SIM</th><th>NÃO</th><th>NP</th><th>OBSERVAÇÕES</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    </table>
     </div>
 </div>
-<div class="table-container">
-<table>
-<thead>
-<tr id="tableHeaders">
-    <th>REQUISITO</th><th>SIM</th><th>NÃO</th><th>NP</th><th>OBSERVAÇÕES</th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-</div>
+<button id="pdfButton" onclick="generatePDF()">Gerar PDF</button>
 
 <script>
 // Objeto que armazena todas as traduções
@@ -114,7 +180,7 @@ const translations = {
         'es': 'DISPOSICIONES MÍNIMAS GENERALES APLICABLES A LOS EQUIPOS DE TRABAJO - ANEXO I',
         'en': 'MINIMUM GENERAL PROVISIONS APPLICABLE TO WORK EQUIPMENT - ANNEX I'
     },
-    // NOVAS TRADUÇÕES PARA OS CAMPOS
+    // TRADUÇÕES PARA OS CAMPOS DE INFORMAÇÃO
     'clientLabel': {
         'pt': 'Nome do Cliente:',
         'es': 'Nombre del Cliente:',
@@ -131,20 +197,20 @@ const translations = {
         'en': ['REQUIREMENT', 'YES', 'NO', 'NA', 'OBSERVATIONS']
     },
 
-    // Conteúdo da Tabela (Artigos e Perguntas) - MANTIDO O MESMO
+    // Conteúdo da Tabela (Artigos e Perguntas)
     'content': [
         // Artigo 3º
         { 'article': { 'pt': 'Artigo 3º - Obrigações gerais do empregador', 'es': 'Artículo 3º - Obligaciones generales del empleador', 'en': 'Article 3 - General obligations of the employer' }, 'questions': [
             { 'id': 'p1', 'pt': 'O equipamento de trabalho é adequado ou está devidamente adaptado ao trabalho a efectuar e garante a segurança e a saúde dos trabalhadores durante a sua utilização?', 'es': '¿El equipo de trabajo es adecuado o está debidamente adaptado al trabajo a realizar y garantiza la seguridad y salud de los trabajadores durante su uso?', 'en': 'Is the work equipment adequate or properly adapted to the work to be carried out and does it guarantee the safety and health of workers during its use?' },
             { 'id': 'p2', 'pt': 'O equipamento de trabalho, é apropriado às condições e características específicas do trabalho, aos riscos existentes para a segurança e a saúde dos trabalhadores, bem como a novos riscos resultantes da sua utilização?', 'es': '¿El equipo de trabajo es apropiado a las condiciones y características específicas del trabajo, a los riesgos existentes para la seguridad y salud de los trabajadores, así como a los nuevos riesgos resultantes de su uso?', 'en': 'Is the work equipment appropriate to the specific working conditions and characteristics, the existing risks to the safety and health of workers, as well as new risks resulting from its use?' },
             { 'id': 'p3', 'pt': 'Os princípios ergonómicos foram tidos em consideração na concepção do local de trabalho e na postura dos trabalhadores durante a utilização do equipamento de trabalho?', 'es': '¿Se tuvieron en cuenta los principios ergonómicos en el diseño del lugar de trabajo y en la postura de los trabajadores durante el uso del equipo de trabajo?', 'en': 'Were ergonomic principles taken into account in the design of the workplace and the posture of workers during the use of work equipment?' },
-            { 'id': 'p4', 'pt': 'Se as medidas previstas nas alíneas anteriores não permitem assegurar eficazmente a segurança ou a saúde dos trabalhadores na utilização dos equipamentos de trabalho, foram adoptadas as medidas adequadas para minimizar os riscos existentes?', 'es': 'Si las medidas previstas en los puntos anteriores no permiten garantizar eficazmente la seguridad o la salud de los trabajadores en el uso de los equipos de trabajo, ¿se adoptaron las medidas adecuadas para minimizar los riesgos existentes?', 'en': 'If the measures provided for in the previous points do not effectively ensure the safety or health of workers when using work equipment, were adequate measures adopted to minimise existing risks?' },
+            { 'id': 'p4', 'pt': 'Se as medidas previstas nas alíneas anteriores não permitem assegurar eficazmente a segurança ou a saúde dos trabalhadores na utilização dos equipamentos de trabalho, foram adoptadas as medidas adequadas para minimizar os riscos existentes?', 'es': 'Si las medidas previstas en los puntos anteriores no permiten garantizar eficazmente la seguridad o la salud de los trabajadores en el uso de los equipos de trabajo, ¿se adoptaron las medidas adequadas para minimizar os riscos existentes?', 'en': 'If the measures provided for in the previous points do not effectively ensure the safety or health of workers when using work equipment, were adequate measures adopted to minimise existing risks?' },
             { 'id': 'p5', 'pt': 'Está assegurada a manutenção adequada do equipamento de trabalho, estão disponíveis registos de manutenção e está identificada a frequência da manutenção?', 'es': '¿Se asegura el mantenimiento adecuado del equipo de trabajo, están disponibles los registros de mantenimiento y se identifica la frecuencia del mantenimiento?', 'en': 'Is adequate maintenance of the work equipment ensured, are maintenance records available, and is the maintenance frequency identified?' }
         ]},
         // Artigo 4º
         { 'article': { 'pt': 'Artigo 4.º - Prescrições mínimas de segurança e regras de utilização dos equipamentos de trabalho', 'es': 'Artículo 4.º - Prescripciones mínimas de seguridad y reglas de uso de los equipos de trabajo', 'en': 'Article 4 - Minimum safety requirements and rules for the use of work equipment' }, 'questions': [
             { 'id': 'p6', 'pt': 'O equipamento de trabalho satisfaz os requisitos mínimos de segurança previstos no Decreto-Lei 50/2005?', 'es': '¿El equipo de trabajo cumple con los requisitos mínimos de seguridad previstos en el Decreto-Ley 50/2005?', 'en': 'Does the work equipment meet the minimum safety requirements provided for in Decree-Law 50/2005?' },
-            { 'id': 'p7', 'pt': 'Os equipamentos de trabalho colocados pela primeira vez à disposição dos trabalhadores da empresa ou do estabelecimento cumprem os requisitos de segurança e de saúde previstos na legislação específica relativa à concepção, ao fabrico e à comercialização?', 'es': '¿Los equipos de trabajo puestos por primeira vez a disposición de los trabajadores de la empresa o establecimiento cumplen con los requisitos de seguridad y salud previstos en la legislación específica relativa al diseño, fabricación y comercialización?', 'en': 'Does the work equipment made available to workers in the company or establishment for the first time comply with the safety and health requirements provided for in the specific legislation on design, manufacturing, and marketing?' },
+            { 'id': 'p7', 'pt': 'Os equipamentos de trabalho colocados pela primeira vez à disposição dos trabalhadores da empresa ou do estabelecimento cumprem os requisitos de segurança e de saúde previstos na legislação específica relativa à concepção, ao fabrico e à comercialização?', 'es': '¿Los equipos de trabajo puestos por primera vez a disposición de los trabajadores de la empresa o establecimiento cumplen con los requisitos de seguridad y salud previstos en la legislación específica relativa al diseño, fabricación y comercialización?', 'en': 'Does the work equipment made available to workers in the company or establishment for the first time comply with the safety and health requirements provided for in the specific legislation on design, manufacturing, and marketing?' },
             { 'id': 'p8', 'pt': 'O equipamento de trabalho deveria ter afixada a marcação CE?', 'es': '¿El equipo de trabajo debería llevar el marcado CE?', 'en': 'Should the work equipment have the CE marking affixed?' },
             { 'id': 'p9', 'pt': 'Se sim, o empregador possui a declaração CE?', 'es': 'Si es así, ¿el empleador posee la declaración CE?', 'en': 'If so, does the employer possess the EC declaration?' },
             { 'id': 'p10', 'pt': 'Os trabalhadores utilizam o equipamento de trabalho em conformidade com o Decreto-Lei 50/2005?', 'es': '¿Los trabajadores utilizan el equipo de trabajo de conformidad con el Decreto-Ley 50/2005?', 'en': 'Do workers use the work equipment in accordance with Decree-Law 50/2005?' }
@@ -152,7 +218,7 @@ const translations = {
         // Artigo 5º
         { 'article': { 'pt': 'Artigo 5.º - Equipamentos de trabalho com riscos específicos', 'es': 'Artículo 5.º - Equipos de trabajo con riesgos específicos', 'en': 'Article 5 - Work equipment with specific risks' }, 'questions': [
             { 'id': 'p11', 'pt': 'É visível algum risco específico para a segurança ou a saúde dos trabalhadores na utilização do equipamento de trabalho?', 'es': '¿Es visible algún riesgo específico para la seguridad o la salud de los trabajadores en el uso del equipo de trabajo?', 'en': 'Is there any specific risk to the safety or health of workers visible when using the work equipment?' },
-            { 'id': 'p12', 'pt': 'Se sim, o empregador tomou as medidas necessárias para que a sua utilização, estejam reservadas apenas a(s) operador(es) especificamente habilitado(s) para o efeito, considerando a correspondente actividade?', 'es': 'Si es así, ¿el empleador tomó las medidas necesarias para que su uso esté reservado únicamente al(los) operador(es) específicamente calificado(s) para el efecto, considerando la actividad correspondiente?', 'en': 'If so, has the employer taken the necessary measures to ensure that its use is reserved only to the operator(s) specifically qualified for the purpose, considering the corresponding activity?' }
+            { 'id': 'p12', 'pt': 'Se sim, o empregador tomou as medidas necessárias para que a sua utilização, estejam reservadas apenas a(s) operador(es) especificamente habilitado(s) para o efeito, considerando a correspondente actividade?', 'es': 'Si es así, ¿el empleador tomó las medidas necesarias para que su uso esteja reservado únicamente al(los) operador(es) específicamente calificado(s) para el efecto, considerando la actividad correspondiente?', 'en': 'If so, has the employer taken the necessary measures to ensure that its use is reserved only to the operator(s) specifically qualified for the purpose, considering the corresponding activity?' }
         ]},
         // Artigo 6º
         { 'article': { 'pt': 'Artigo 6.º - Verificação dos equipamentos de trabalho', 'es': 'Artículo 6.º - Verificación de los equipos de trabajo', 'en': 'Article 6 - Verification of work equipment' }, 'questions': [
@@ -165,24 +231,24 @@ const translations = {
         { 'article': { 'pt': 'Artigo 7.º - Resultados das verificações', 'es': 'Artículo 7.º - Resultados de las verificaciones', 'en': 'Article 7 - Results of checks' }, 'questions': [
             { 'id': 'p17', 'pt': 'Estão disponíveis os registos de verificação da última verificação e de outras verificações ou ensaios efectuados nos dois anos anteriores?', 'es': '¿Están disponibles los registros de la última verificación y de otras verificaciones o pruebas realizadas en los dos años anteriores?', 'en': 'Are the verification records of the last check and other checks or tests carried out in the two previous years available?' },
             { 'id': 'p18', 'pt': 'A frequência com que estas verificações e ensaios são efectuados é definida pela empresa (qual)?', 'es': '¿La frecuencia con que se realizan estas verificaciones y pruebas es definida por la empresa (cuál)?', 'en': 'Is the frequency with which these checks and tests are carried out defined by the company (which one)?' },
-            { 'id': 'p19', 'pt': 'Se o equipamento de trabalho for utilizado fora da empresa, é acompanhado de provas materiais da última verificação?', 'es': 'Si el equipo de trabajo se utiliza fuera de la empresa, ¿va acompanhado de pruebas materiales de la última verificación?', 'en': 'If the work equipment is used outside the company, is it accompanied by material proof of the last check?' }
+            { 'id': 'p19', 'pt': 'Se o equipamento de trabalho for utilizado fora da empresa, é acompanhado de provas materiais da última verificação?', 'es': 'Si el equipo de trabalho se utiliza fora da empresa, ¿vai acompanhado de provas materiais da última verificación?', 'en': 'If the work equipment is used outside the company, is it accompanied by material proof of the last check?' }
         ]},
         // Artigo 8º
         { 'article': { 'pt': 'Artigo 8.º - Obrigações de formação e informação', 'es': 'Artículo 8.º - Obligaciones de formación e información', 'en': 'Article 8 - Training and information obligations' }, 'questions': [
             { 'id': 'p20', 'pt': 'Os trabalhadores receberam informações adequadas sobre o equipamento de trabalho utilizado?', 'es': '¿Los trabajadores recibieron información adecuada sobre el equipo de trabajo utilizado?', 'en': 'Have workers received adequate information about the work equipment used?' },
-            { 'id': 'p21', 'pt': 'A informação é facilmente compreensível, escrita, se necessário, e contém, pelo menos, as seguintes indicações:', 'es': '¿La información es fácilmente comprensible, escrita, si es necesario, y contiene, al menos, las siguientes indicaciones?', 'en': 'Is the information easily understandable, written if necessary, and does it contain at least the following indications?' },
+            { 'id': 'p21', 'pt': 'A informação é facilmente compreensível, escrita, se necessário, e contém, pelo menos, as seguintes indicações:', 'es': '¿La información es fácilmente comprensível, escrita, si es necesario, y contiene, al menos, las siguientes indicaciones?', 'en': 'Is the information easily understandable, written if necessary, and does it contain at least the following indications?' },
             { 'id': 'p22', 'pt': 'a) Condições de utilização dos equipamentos;', 'es': 'a) Condiciones de uso de los equipos;', 'en': 'a) Conditions for using the equipment;' },
-            { 'id': 'p23', 'pt': 'b) Situações anómalas previsíveis;', 'es': 'b) Situaciones anómalas previsibles;', 'en': 'b) Foreseeable abnormal situations;' },
+            { 'id': 'p23', 'pt': 'b) Situações anómalas previsíveis;', 'es': 'b) Situações anómalas previsíveis;', 'en': 'b) Foreseeable abnormal situations;' },
             { 'id': 'p24', 'pt': 'c) Conclusões a tirar da experiência eventualmente adquirida com a utilização do equipamento;', 'es': 'c) Conclusiones a extraer de la experiencia eventualmente adquirida con el uso del equipo;', 'en': 'c) Conclusions to be drawn from the experience potentially acquired with the use of the equipment;' },
             { 'id': 'p25', 'pt': 'd) Riscos para os trabalhadores decorrentes de equipamentos de trabalho existentes no ambiente de trabalho ou de alterações a esses equipamentos que possam afectar a trabalhadores, ainda que não os utilizem directamente.', 'es': 'd) Riesgos para los trabajadores derivados de equipos de trabajo existentes en el ambiente de trabajo o de alteraciones a estos equipos que puedan afectar a trabajadores, aunque no los utilicen directamente.', 'en': 'd) Risks to workers arising from work equipment present in the work environment or from alterations to this equipment that may affect workers, even if they do not use it directly.' }
         ]},
         // Artigo 11º
         { 'article': { 'pt': 'Artigo 11º - Sistemas de comando', 'es': 'Artículo 11º - Sistemas de mando', 'en': 'Article 11 - Control systems' }, 'questions': [
             { 'id': 'p26', 'pt': 'Os sistemas de controlo dos equipamentos de trabalho que têm impacto na segurança são claramente visíveis, identificáveis e devidamente assinalados?', 'es': '¿Los sistemas de control de los equipos de trabajo que tienen un impacto en la seguridad son claramente visibles, identificables y debidamente señalizados?', 'en': 'Are the control systems of work equipment that impact safety clearly visible, identifiable, and properly marked?' },
-            { 'id': 'p27', 'pt': 'Os sistemas de controlo estão situados fora das zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'es': '¿Los sistemas de control están situados fuera de las zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'en': 'Are the control systems located outside the dangerous zones and in a way that their operation, particularly by unintentional manipulation, cannot cause additional risks?' },
-            { 'id': 'p28', 'pt': 'O operador pode certificar-se, a partir do posto de comando principal, de que não há pessoas nas zonas perigosas ou, se tal não for possível, o arranque é automaticamente precedido de um sistema de alerta fiável, em especial um sinal sonoro ou visual.', 'es': 'El operador puede asegurarse, desde el puesto de mando principal, de que no hay personas en las zonas peligrosas o, si no es posible, el arranque está precedido automáticamente por un sistema de alerta fiable, en especial una señal sonora o visual.', 'en': 'The operator can ensure, from the main control station, that there are no people in the dangerous zones or, if not possible, the start-up is automatically preceded by a reliable alert system, especially an audible or visual signal.' },
-            { 'id': 'p29', 'pt': 'Após o aviso previsto no número anterior, o trabalhador exposto dispõe do tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?', 'es': 'Después del aviso previsto en el número anterior, ¿el trabajador expuesto dispõe del tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?', 'en': 'Following the warning provided in the previous paragraph, does the exposed worker have the time and, if necessary, the indispensable means to immediately move away from the dangerous zone?' },
-            { 'id': 'p30', 'pt': 'Os sistemas de controlo são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?', 'es': '¿Los sistemas de control são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?', 'en': 'Are the control systems safe and chosen taking into account foreseeable failures, disturbances, and limitations of the use for which they were designed?' }
+            { 'id': 'p27', 'pt': 'Os sistemas de controlo estão situados fora das zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'es': '¿Los sistemas de control estão situados fora das zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'en': 'Are the control systems located outside the dangerous zones and in a way that their operation, particularly by unintentional manipulation, cannot cause additional risks?' },
+            { 'id': 'p28', 'pt': 'O operador pode certificar-se, a partir do posto de comando principal, de que não há pessoas nas zonas perigosas ou, se tal não for possível, o arranque é automaticamente precedido de um sistema de alerta fiável, em especial um sinal sonoro ou visual.', 'es': 'El operador puede asegurarse, desde el puesto de mando principal, de que no hay personas en las zonas perigosas o, si no es possível, o arranque está precedido automáticamente por un sistema de alerta fiable, en especial una señal sonora o visual.', 'en': 'The operator can ensure, from the main control station, that there are no people in the dangerous zones or, if not possible, the start-up is automatically preceded by a reliable alert system, especially an audible or visual signal.' },
+            { 'id': 'p29', 'pt': 'Após o aviso previsto no número anterior, o trabalhador exposto dispõe do tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?', 'es': 'Después del aviso previsto en el número anterior, ¿el trabajador exposto dispõe do tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?', 'en': 'Following the warning provided in the previous paragraph, does the exposed worker have the time and, if necessary, the indispensable means to immediately move away from the dangerous zone?' },
+            { 'id': 'p30', 'pt': 'Os sistemas de controlo são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?', 'es': '¿Os sistemas de controlo são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?', 'en': 'Are the control systems safe and chosen taking into account foreseeable failures, disturbances, and limitations of the use for which they were designed?' }
         ]},
         // Artigo 12º
         { 'article': { 'pt': 'Artigo 12º - Arranque do equipamento de trabalho', 'es': 'Artículo 12º - Puesta en marcha del equipo de trabajo', 'en': 'Article 12 - Start-up of work equipment' }, 'questions': [
@@ -258,16 +324,14 @@ const translations = {
 // Função para gerar o HTML da tabela
 function generateTable(lang) {
     const tbody = document.querySelector('tbody');
-    tbody.innerHTML = ''; // Limpa o conteúdo existente
+    tbody.innerHTML = ''; 
 
     translations.content.forEach(articleGroup => {
-        // Linha do Título do Artigo
         const articleRow = document.createElement('tr');
         articleRow.className = 'titulo-artigo';
         articleRow.innerHTML = `<td colspan='5'>${articleGroup.article[lang]}</td>`;
         tbody.appendChild(articleRow);
 
-        // Linhas das Perguntas
         articleGroup.questions.forEach(q => {
             const questionRow = document.createElement('tr');
             questionRow.className = 'pergunta';
@@ -302,8 +366,71 @@ function changeLanguage(lang) {
     generateTable(lang);
 }
 
+// =========================================================================
+// FUNÇÃO DE GERAÇÃO DE PDF
+// =========================================================================
+function generatePDF() {
+    const { jsPDF } = window.jspdf;
+    const input = document.getElementById('contentToPrint');
+    
+    // Oculta APENAS o botão antes da captura. O seletor de idioma (language-selector) fica visível
+    document.getElementById('pdfButton').classList.add('hide-on-pdf');
+
+    // Remove overflow-x para que a tabela seja renderizada na sua totalidade
+    const tableContainer = document.querySelector('.table-container');
+    const originalOverflow = tableContainer.style.overflowX;
+    tableContainer.style.overflowX = 'visible'; 
+
+    // O html2canvas converte o HTML e o CSS num canvas (imagem)
+    html2canvas(input, {
+        scale: 2, // Aumenta a resolução para melhor qualidade do PDF
+        logging: false,
+        useCORS: true,
+        backgroundColor: '#2D2D2D' // Define o fundo escuro
+    }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const imgWidth = 210; // Tamanho A4 em mm (210mm)
+        const pageHeight = 297; // Tamanho A4 em mm (297mm)
+        const imgHeight = canvas.height * imgWidth / canvas.width;
+        let heightLeft = imgHeight;
+
+        // Cria o documento PDF
+        const doc = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
+
+        // Adiciona a imagem ao PDF (pode ser necessário mais de uma página)
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            doc.addPage();
+            doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+
+        // Restaura o overflow original após a captura
+        tableContainer.style.overflowX = originalOverflow;
+        
+        // Exporta o PDF
+        const filename = 'checklist_seguranca.pdf';
+        doc.save(filename);
+        
+        // Volta a mostrar APENAS o botão após gerar o PDF
+        document.getElementById('pdfButton').classList.remove('hide-on-pdf');
+    }).catch(error => {
+        console.error("Erro ao gerar PDF:", error);
+        // Garante que o botão volte a aparecer mesmo em caso de erro
+        document.getElementById('pdfButton').classList.remove('hide-on-pdf');
+        // Você deve usar um modal de erro, mas para o ambiente simples, usaremos o console.
+        alert("Ocorreu um erro ao gerar o PDF. Verifique o console para detalhes.");
+    });
+}
+
 // Inicializar a tabela no idioma padrão (Português) ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
+    // Certificar que o seletor de idioma está na opção correta
+    document.getElementById('language-select').value = 'pt';
     changeLanguage('pt');
 });
 
