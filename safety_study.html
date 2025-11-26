@@ -1,13 +1,32 @@
-
 <!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checklist Equipamentos de Trabalho</title>
+<title id="pageTitle">Checklist Equipamentos de Trabalho</title>
 <style>
+/* O CSS foi modificado para posicionar o seletor */
 body { font-family: Arial, sans-serif; padding: 20px; margin:0; background-color: #2D2D2D; color:#F4F3F2; }
 h1 { color:#F4F3F2; margin-bottom: 20px; }
+
+/* NOVO: Estilos para posicionar no canto superior direito */
+.language-selector {
+    position: absolute; /* Permite posicionar o elemento */
+    top: 20px; /* Distância do topo */
+    right: 20px; /* Distância da direita */
+    z-index: 1000; /* Garante que fique acima de outros elementos */
+}
+.language-selector select { 
+    padding: 5px; 
+    border-radius: 4px; 
+    background-color: #3A3A3A; 
+    border: 1px solid #555;
+    color: #F4F3F2; /* Cor do texto */
+    font-size: 16px; 
+    font-weight: bold;
+}
+/* FIM NOVO */
+
 .table-container { overflow-x:auto; -webkit-overflow-scrolling: touch; }
 table { width:100%; border-collapse: collapse; min-width:700px; background-color:#3A3A3A; border-radius:8px; overflow:hidden; }
 th, td { padding:8px; border:1px solid #555; vertical-align:top; word-wrap:break-word; }
@@ -19,94 +38,224 @@ input[type=radio] { display:block; margin:0 auto; }
 </style>
 </head>
 <body>
-<h1>DISPOSIÇÕES MÍNIMAS GERAIS APLICÁVEIS AOS EQUIPAMENTOS DE TRABALHO - ANEXO I</h1>
+
+<div class="language-selector">
+    <select id="language-select" onchange="changeLanguage(this.value)">
+        <option value="pt">PT</option>
+        <option value="es">ES</option>
+        <option value="en">EN</option>
+    </select>
+</div>
+
+<h1 id="mainTitle">DISPOSIÇÕES MÍNIMAS GERAIS APLICÁVEIS AOS EQUIPAMENTOS DE TRABALHO - ANEXO I</h1>
+
 <div class="table-container">
 <table>
 <thead>
-<tr><th>REQUISITO</th><th>SIM</th><th>NÃO</th><th>NP</th><th>OBSERVAÇÕES</th></tr>
+<tr id="tableHeaders">
+    <th>REQUISITO</th><th>SIM</th><th>NÃO</th><th>NP</th><th>OBSERVAÇÕES</th>
+</tr>
 </thead>
 <tbody>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 3º - Obrigações gerais do empregador</td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho é adequado ou está devidamente adaptado ao trabalho a efectuar e garante a segurança e a saúde dos trabalhadores durante a sua utilização?</td><td><input type='radio' name='p1' value='sim'></td><td><input type='radio' name='p1' value='nao'></td><td><input type='radio' name='p1' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho, é apropriado às condições e características específicas do trabalho, aos riscos existentes para a segurança e a saúde dos trabalhadores, bem como a novos riscos resultantes da sua utilização?</td><td><input type='radio' name='p2' value='sim'></td><td><input type='radio' name='p2' value='nao'></td><td><input type='radio' name='p2' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Os princípios ergonómicos foram tidos em consideração na concepção do local de trabalho e na postura dos trabalhadores durante a utilização do equipamento de trabalho?</td><td><input type='radio' name='p3' value='sim'></td><td><input type='radio' name='p3' value='nao'></td><td><input type='radio' name='p3' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Se as medidas previstas nas alíneas anteriores não permitem assegurar eficazmente a segurança ou a saúde dos trabalhadores na utilização dos equipamentos de trabalho, foram adoptadas as medidas adequadas para minimizar os riscos existentes?</td><td><input type='radio' name='p4' value='sim'></td><td><input type='radio' name='p4' value='nao'></td><td><input type='radio' name='p4' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Está assegurada a manutenção adequada do equipamento de trabalho, estão disponíveis registos de manutenção e está identificada a frequência da manutenção?</td><td><input type='radio' name='p5' value='sim'></td><td><input type='radio' name='p5' value='nao'></td><td><input type='radio' name='p5' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 4.º - Prescrições mínimas de segurança e regras de utilização dos equipamentos de trabalho</td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho satisfaz os requisitos mínimos de segurança previstos no Decreto-Lei 50/2005?</td><td><input type='radio' name='p6' value='sim'></td><td><input type='radio' name='p6' value='nao'></td><td><input type='radio' name='p6' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Os equipamentos de trabalho colocados pela primeira vez à disposição dos trabalhadores da empresa ou do estabelecimento cumprem os requisitos de segurança e de saúde previstos na legislação específica relativa à concepção, ao fabrico e à comercialização?</td><td><input type='radio' name='p7' value='sim'></td><td><input type='radio' name='p7' value='nao'></td><td><input type='radio' name='p7' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho deveria ter afixada a marcação CE?</td><td><input type='radio' name='p8' value='sim'></td><td><input type='radio' name='p8' value='nao'></td><td><input type='radio' name='p8' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Se sim, o empregador possui a declaração CE?</td><td><input type='radio' name='p9' value='sim'></td><td><input type='radio' name='p9' value='nao'></td><td><input type='radio' name='p9' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Os trabalhadores utilizam o equipamento de trabalho em conformidade com o Decreto-Lei 50/2005?</td><td><input type='radio' name='p10' value='sim'></td><td><input type='radio' name='p10' value='nao'></td><td><input type='radio' name='p10' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 5.º - Equipamentos de trabalho com riscos específicos</td></tr>
-<tr class='pergunta'><td>É visível algum risco específico para a segurança ou a saúde dos trabalhadores na utilização do equipamento de trabalho?</td><td><input type='radio' name='p11' value='sim'></td><td><input type='radio' name='p11' value='nao'></td><td><input type='radio' name='p11' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Se sim, o empregador tomou as medidas necessárias para que a sua utilização, estejam reservadas apenas a(s) operador(es) especificamente habilitado(s) para o efeito, considerando a correspondente actividade?</td><td><input type='radio' name='p12' value='sim'></td><td><input type='radio' name='p12' value='nao'></td><td><input type='radio' name='p12' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 6.º - Verificação dos equipamentos de trabalho</td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho foi verificado após a instalação ou montagem em novas instalações, antes de iniciar ou retomar o funcionamento?</td><td><input type='radio' name='p13' value='sim'></td><td><input type='radio' name='p13' value='nao'></td><td><input type='radio' name='p13' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>São realizadas verificações periódicas ao equipamento de trabalho?</td><td><input type='radio' name='p14' value='sim'></td><td><input type='radio' name='p14' value='nao'></td><td><input type='radio' name='p14' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>São efectuados controlos extraordinários dos equipamentos de trabalho quando ocorrem acontecimentos excepcionais (transformações, acidentes, fenómenos naturais ou períodos prolongados de não utilização)?</td><td><input type='radio' name='p15' value='sim'></td><td><input type='radio' name='p15' value='nao'></td><td><input type='radio' name='p15' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>As verificações foram efectuadas por uma pessoa competente (existem provas dessa competência)?</td><td><input type='radio' name='p16' value='sim'></td><td><input type='radio' name='p16' value='nao'></td><td><input type='radio' name='p16' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 7.º - Resultados das verificações</td></tr>
-<tr class='pergunta'><td>Estão disponíveis os registos de verificação da última verificação e de outras verificações ou ensaios efectuados nos dois anos anteriores?</td><td><input type='radio' name='p17' value='sim'></td><td><input type='radio' name='p17' value='nao'></td><td><input type='radio' name='p17' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>A frequência com que estas verificações e ensaios são efectuados é definida pela empresa (qual)?</td><td><input type='radio' name='p18' value='sim'></td><td><input type='radio' name='p18' value='nao'></td><td><input type='radio' name='p18' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Se o equipamento de trabalho for utilizado fora da empresa, é acompanhado de provas materiais da última verificação?</td><td><input type='radio' name='p19' value='sim'></td><td><input type='radio' name='p19' value='nao'></td><td><input type='radio' name='p19' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 8.º - Obrigações de formação e informação</td></tr>
-<tr class='pergunta'><td>Os trabalhadores receberam informações adequadas sobre o equipamento de trabalho utilizado?</td><td><input type='radio' name='p20' value='sim'></td><td><input type='radio' name='p20' value='nao'></td><td><input type='radio' name='p20' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>A informação é facilmente compreensível, escrita, se necessário, e contém, pelo menos, as seguintes indicações:</td><td><input type='radio' name='p21' value='sim'></td><td><input type='radio' name='p21' value='nao'></td><td><input type='radio' name='p21' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>a) Condições de utilização dos equipamentos;</td><td><input type='radio' name='p22' value='sim'></td><td><input type='radio' name='p22' value='nao'></td><td><input type='radio' name='p22' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>b) Situações anómalas previsíveis;</td><td><input type='radio' name='p23' value='sim'></td><td><input type='radio' name='p23' value='nao'></td><td><input type='radio' name='p23' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>c) Conclusões a tirar da experiência eventualmente adquirida com a utilização do equipamento;</td><td><input type='radio' name='p24' value='sim'></td><td><input type='radio' name='p24' value='nao'></td><td><input type='radio' name='p24' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>d) Riscos para os trabalhadores decorrentes de equipamentos de trabalho existentes no ambiente de trabalho ou de alterações a esses equipamentos que possam afectar a trabalhadores, ainda que não os utilizem directamente.</td><td><input type='radio' name='p25' value='sim'></td><td><input type='radio' name='p25' value='nao'></td><td><input type='radio' name='p25' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 11º - Sistemas de comando</td></tr>
-<tr class='pergunta'><td>Os sistemas de controlo dos equipamentos de trabalho que têm impacto na segurança são claramente visíveis, identificáveis e devidamente assinalados?</td><td><input type='radio' name='p26' value='sim'></td><td><input type='radio' name='p26' value='nao'></td><td><input type='radio' name='p26' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Os sistemas de controlo estão situados fora das zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?</td><td><input type='radio' name='p27' value='sim'></td><td><input type='radio' name='p27' value='nao'></td><td><input type='radio' name='p27' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>O operador pode certificar-se, a partir do posto de comando principal, de que não há pessoas nas zonas perigosas ou, se tal não for possível, o arranque é automaticamente precedido de um sistema de alerta fiável, em especial um sinal sonoro ou visual.</td><td><input type='radio' name='p28' value='sim'></td><td><input type='radio' name='p28' value='nao'></td><td><input type='radio' name='p28' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Após o aviso previsto no número anterior, o trabalhador exposto dispõe do tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?</td><td><input type='radio' name='p29' value='sim'></td><td><input type='radio' name='p29' value='nao'></td><td><input type='radio' name='p29' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Os sistemas de controlo são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?</td><td><input type='radio' name='p30' value='sim'></td><td><input type='radio' name='p30' value='nao'></td><td><input type='radio' name='p30' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 12º - Arranque do equipamento de trabalho</td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho está equipado com um sistema de comando de modo a que seja necessária uma acção voluntária sobre um comando para efeitos de:</td><td><input type='radio' name='p31' value='sim'></td><td><input type='radio' name='p31' value='nao'></td><td><input type='radio' name='p31' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>a) Colocar o equipamento de trabalho em funcionamento?</td><td><input type='radio' name='p32' value='sim'></td><td><input type='radio' name='p32' value='nao'></td><td><input type='radio' name='p32' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>b) O equipamento arrancar após uma paragem, qualquer que seja a origem desta;</td><td><input type='radio' name='p33' value='sim'></td><td><input type='radio' name='p33' value='nao'></td><td><input type='radio' name='p33' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>c) O equipamento sofrerá uma modificação importante das condições de funcionamento, nomeadamente velocidade ou pressão.</td><td><input type='radio' name='p34' value='sim'></td><td><input type='radio' name='p34' value='nao'></td><td><input type='radio' name='p34' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 13º - Paragem do equipamento de trabalho</td></tr>
-<tr class='pergunta'><td>a) O equipamento de trabalho possui um sistema de comando que permita a sua paragem total em condições de segurança?</td><td><input type='radio' name='p35' value='sim'></td><td><input type='radio' name='p35' value='nao'></td><td><input type='radio' name='p35' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>b) Em função dos riscos que o equipamento de trabalho apresenta e do tempo normal de paragem, a instalação de um dispositivo de paragem de emergência proporciona mais segurança e está instalado?</td><td><input type='radio' name='p36' value='sim'></td><td><input type='radio' name='p36' value='nao'></td><td><input type='radio' name='p36' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>a) Cada posto de trabalho dispõe de um sistema de comando que permite a paragem total ou parcial do equipamento em caso de situação de perigo?</td><td><input type='radio' name='p37' value='sim'></td><td><input type='radio' name='p37' value='nao'></td><td><input type='radio' name='p37' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>b) A ordem de paragem do equipamento de trabalho tem prioridade sobre as ordens de arranque?</td><td><input type='radio' name='p38' value='sim'></td><td><input type='radio' name='p38' value='nao'></td><td><input type='radio' name='p38' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>O fornecimento de energia aos actuadores ou aos seus elementos periféricos é interrompido depois de o equipamento de trabalho ter parado?</td><td><input type='radio' name='p39' value='sim'></td><td><input type='radio' name='p39' value='nao'></td><td><input type='radio' name='p39' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 14º - Estabilidade de ruptura</td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho e os seus elementos estão estabilizados por fixação ou por outros meios, se necessário para a segurança ou a saúde dos trabalhadores?</td><td><input type='radio' name='p40' value='sim'></td><td><input type='radio' name='p40' value='nao'></td><td><input type='radio' name='p40' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Se existirem riscos de estilhaçamento ou de rotura de elementos do equipamento susceptíveis de pôr em perigo a segurança ou a saúde dos trabalhadores foram tomadas as medidas de protecção adequado?</td><td><input type='radio' name='p41' value='sim'></td><td><input type='radio' name='p41' value='nao'></td><td><input type='radio' name='p41' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 15º - Projecções e emanações</td></tr>
-<tr class='pergunta'><td>Se no equipamento de trabalho existirem riscos devido a quedas ou projecções de objectos, dispõe de dispositivos de segurança adequados?</td><td><input type='radio' name='p42' value='sim'></td><td><input type='radio' name='p42' value='nao'></td><td><input type='radio' name='p42' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Se no equipamento de trabalho existirem riscos devido a emanações de gases, vapores ou líquidos ou a emissão de poeiras, dipõe de dispositivos de retenção ou extracção eficazes, instalados na proximidade da respectiva fonte?</td><td><input type='radio' name='p43' value='sim'></td><td><input type='radio' name='p43' value='nao'></td><td><input type='radio' name='p43' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 16º - Riscos de contacto mecânico</td></tr>
-<tr class='pergunta'><td>Os elementos móveis do equipamento de trabalho que possam causar acidentes por contacto mecânico possuem protectores que impeçam o acesso às zonas perigosas ou de dispositivos que interrompam o movimento dos elementos móveis antes do acesso a essas zonas?</td><td><input type='radio' name='p44' value='sim'></td><td><input type='radio' name='p44' value='nao'></td><td><input type='radio' name='p44' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Protectores e dispositivos de protecção:</td><td><input type='radio' name='p45' value='sim'></td><td><input type='radio' name='p45' value='nao'></td><td><input type='radio' name='p45' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>a) São de construção robusta;</td><td><input type='radio' name='p46' value='sim'></td><td><input type='radio' name='p46' value='nao'></td><td><input type='radio' name='p46' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>b) Não ocasionam riscos suplementares;</td><td><input type='radio' name='p47' value='sim'></td><td><input type='radio' name='p47' value='nao'></td><td><input type='radio' name='p47' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>c) Não podem ser facilmente neutralizados ou tornados inoperacionais;</td><td><input type='radio' name='p48' value='sim'></td><td><input type='radio' name='p48' value='nao'></td><td><input type='radio' name='p48' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>d) Estão situados a uma distância suficiente da zona perigosa;</td><td><input type='radio' name='p49' value='sim'></td><td><input type='radio' name='p49' value='nao'></td><td><input type='radio' name='p49' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>e) Não limitam a observação do ciclo de trabalho mais do que o necessário.</td><td><input type='radio' name='p50' value='sim'></td><td><input type='radio' name='p50' value='nao'></td><td><input type='radio' name='p50' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 17º - Iluminação e temperatura</td></tr>
-<tr class='pergunta'><td>As zonas e os pontos de trabalho ou de manutenção dos equipamentos de trabalho estão suficientemente iluminados em função das tarefas a executar?</td><td><input type='radio' name='p51' value='sim'></td><td><input type='radio' name='p51' value='nao'></td><td><input type='radio' name='p51' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>As partes do equipamento de trabalho que atingem temperaturas elevadas ou muito baixas estão protegidas contra o risco de contacto ou proximidade por parte dos trabalhadores?</td><td><input type='radio' name='p52' value='sim'></td><td><input type='radio' name='p52' value='nao'></td><td><input type='radio' name='p52' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 18º - Dispositivos de aviso</td></tr>
-<tr class='pergunta'><td>Os dispositivos de alerta são ouvidos e compreendidos de forma fácil e inequívoca?</td><td><input type='radio' name='p53' value='sim'></td><td><input type='radio' name='p53' value='nao'></td><td><input type='radio' name='p53' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 19º - Manutenção do equipamento</td></tr>
-<tr class='pergunta'><td>As operações de manutenção podem ser efectuadas com os equipamentos de trabalho parados ou, se tal não for possível, podem ser efectuadas fora das zonas perigosas?</td><td><input type='radio' name='p54' value='sim'></td><td><input type='radio' name='p54' value='nao'></td><td><input type='radio' name='p54' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho tem um registo de manutenção? Está actualizado?</td><td><input type='radio' name='p55' value='sim'></td><td><input type='radio' name='p55' value='nao'></td><td><input type='radio' name='p55' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 20º - Riscos eléctricos, de incêndio e de explosão</td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho é adequado para proteger os trabalhadores expostos contra os riscos de contacto directo ou indirecto com a electricidade?</td><td><input type='radio' name='p56' value='sim'></td><td><input type='radio' name='p56' value='nao'></td><td><input type='radio' name='p56' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho está adequado para proteger os trabalhadores contra os riscos de:</td><td><input type='radio' name='p57' value='sim'></td><td><input type='radio' name='p57' value='nao'></td><td><input type='radio' name='p57' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>- Incêndio ou incêndio provocado pelo equipamento?</td><td><input type='radio' name='p58' value='sim'></td><td><input type='radio' name='p58' value='nao'></td><td><input type='radio' name='p58' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>- Emanações de gases, pó ou vapores produzidos, utilizados ou armazenados pelo equipamento?</td><td><input type='radio' name='p59' value='sim'></td><td><input type='radio' name='p59' value='nao'></td><td><input type='radio' name='p59' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>- Libertação de líquidos ou outras substâncias produzidas, utilizadas ou armazenadas pelo equipamento?</td><td><input type='radio' name='p60' value='sim'></td><td><input type='radio' name='p60' value='nao'></td><td><input type='radio' name='p60' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Os equipamentos de trabalho são adequados para evitar o risco de explosão dos equipamentos ou das substâncias por eles produzidas ou das substâncias neles utilizadas ou armazenadas.</td><td><input type='radio' name='p61' value='sim'></td><td><input type='radio' name='p61' value='nao'></td><td><input type='radio' name='p61' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 21º - Fontes de energia</td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho dispõe de dispositivos que permitem isolá-lo de cada uma das suas fontes de energia externas?</td><td><input type='radio' name='p62' value='sim'></td><td><input type='radio' name='p62' value='nao'></td><td><input type='radio' name='p62' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Os dispositivos de isolamento da fonte de energia são claramente identificáveis?</td><td><input type='radio' name='p63' value='sim'></td><td><input type='radio' name='p63' value='nao'></td><td><input type='radio' name='p63' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='pergunta'><td>Não existe qualquer risco para os trabalhadores em caso de reconexão das fontes de energia?</td><td><input type='radio' name='p64' value='sim'></td><td><input type='radio' name='p64' value='nao'></td><td><input type='radio' name='p64' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-<tr class='titulo-artigo'><td colspan='5'>Artigo 22º - Sinalização de segurança</td></tr>
-<tr class='pergunta'><td>O equipamento de trabalho tem os avisos e marcações necessários para garantir a segurança dos trabalhadores?</td><td><input type='radio' name='p65' value='sim'></td><td><input type='radio' name='p65' value='nao'></td><td><input type='radio' name='p65' value='np'></td><td><textarea class='obs'></textarea></td></tr>
-</tbody></table></div></body></html>
+</tbody>
+</table>
+</div>
+
+<script>
+// Objeto que armazena todas as traduções (MANTIDO O MESMO)
+const translations = {
+    // Títulos da Página e Tabela
+    'pageTitle': {
+        'pt': 'Checklist Equipamentos de Trabalho',
+        'es': 'Lista de Verificación de Equipos de Trabajo',
+        'en': 'Work Equipment Checklist'
+    },
+    'mainTitle': {
+        'pt': 'DISPOSIÇÕES MÍNIMAS GERAIS APLICÁVEIS AOS EQUIPAMENTOS DE TRABALHO - ANEXO I',
+        'es': 'DISPOSICIONES MÍNIMAS GENERALES APLICABLES A LOS EQUIPOS DE TRABAJO - ANEXO I',
+        'en': 'MINIMUM GENERAL PROVISIONS APPLICABLE TO WORK EQUIPMENT - ANNEX I'
+    },
+    'tableHeaders': {
+        'pt': ['REQUISITO', 'SIM', 'NÃO', 'NP', 'OBSERVAÇÕES'],
+        'es': ['REQUISITO', 'SÍ', 'NO', 'NA', 'OBSERVACIONES'],
+        'en': ['REQUIREMENT', 'YES', 'NO', 'NA', 'OBSERVATIONS']
+    },
+
+    // Conteúdo da Tabela (MANTIDO O MESMO - 65 perguntas)
+    'content': [
+        // Artigo 3º
+        { 'article': { 'pt': 'Artigo 3º - Obrigações gerais do empregador', 'es': 'Artículo 3º - Obligaciones generales del empleador', 'en': 'Article 3 - General obligations of the employer' }, 'questions': [
+            { 'id': 'p1', 'pt': 'O equipamento de trabalho é adequado ou está devidamente adaptado ao trabalho a efectuar e garante a segurança e a saúde dos trabalhadores durante a sua utilização?', 'es': '¿El equipo de trabajo es adecuado o está debidamente adaptado al trabajo a realizar y garantiza la seguridad y salud de los trabajadores durante su uso?', 'en': 'Is the work equipment adequate or properly adapted to the work to be carried out and does it guarantee the safety and health of workers during its use?' },
+            { 'id': 'p2', 'pt': 'O equipamento de trabalho, é apropriado às condições e características específicas do trabalho, aos riscos existentes para a segurança e a saúde dos trabalhadores, bem como a novos riscos resultantes da sua utilização?', 'es': '¿El equipo de trabajo es apropiado a las condiciones y características específicas del trabajo, a los riesgos existentes para la seguridad y salud de los trabajadores, así como a los nuevos riesgos resultantes de su uso?', 'en': 'Is the work equipment appropriate to the specific working conditions and characteristics, the existing risks to the safety and health of workers, as well as new risks resulting from its use?' },
+            { 'id': 'p3', 'pt': 'Os princípios ergonómicos foram tidos em consideração na concepção do local de trabalho e na postura dos trabalhadores durante a utilização do equipamento de trabalho?', 'es': '¿Se tuvieron en cuenta los principios ergonómicos en el diseño del lugar de trabajo y en la postura de los trabajadores durante el uso del equipo de trabajo?', 'en': 'Were ergonomic principles taken into account in the design of the workplace and the posture of workers during the use of work equipment?' },
+            { 'id': 'p4', 'pt': 'Se as medidas previstas nas alíneas anteriores não permitem assegurar eficazmente a segurança ou a saúde dos trabalhadores na utilização dos equipamentos de trabalho, foram adoptadas as medidas adequadas para minimizar os riscos existentes?', 'es': 'Si las medidas previstas en los puntos anteriores no permiten garantizar eficazmente la seguridad o la salud de los trabajadores en el uso de los equipos de trabajo, ¿se adoptaron las medidas adecuadas para minimizar los riesgos existentes?', 'en': 'If the measures provided for in the previous points do not effectively ensure the safety or health of workers when using work equipment, were adequate measures adopted to minimise existing risks?' },
+            { 'id': 'p5', 'pt': 'Está assegurada a manutenção adequada do equipamento de trabalho, estão disponíveis registos de manutenção e está identificada a frequência da manutenção?', 'es': '¿Se asegura el mantenimiento adecuado del equipo de trabajo, están disponibles los registros de mantenimiento y se identifica la frecuencia del mantenimiento?', 'en': 'Is adequate maintenance of the work equipment ensured, are maintenance records available, and is the maintenance frequency identified?' }
+        ]},
+        // Artigo 4º
+        { 'article': { 'pt': 'Artigo 4.º - Prescrições mínimas de segurança e regras de utilização dos equipamentos de trabalho', 'es': 'Artículo 4.º - Prescripciones mínimas de seguridad y reglas de uso de los equipos de trabajo', 'en': 'Article 4 - Minimum safety requirements and rules for the use of work equipment' }, 'questions': [
+            { 'id': 'p6', 'pt': 'O equipamento de trabalho satisfaz os requisitos mínimos de segurança previstos no Decreto-Lei 50/2005?', 'es': '¿El equipo de trabajo cumple con los requisitos mínimos de seguridad previstos en el Decreto-Ley 50/2005?', 'en': 'Does the work equipment meet the minimum safety requirements provided for in Decree-Law 50/2005?' },
+            { 'id': 'p7', 'pt': 'Os equipamentos de trabalho colocados pela primeira vez à disposição dos trabalhadores da empresa ou do estabelecimento cumprem os requisitos de segurança e de saúde previstos na legislação específica relativa à concepção, ao fabrico e à comercialização?', 'es': '¿Los equipos de trabajo puestos por primera vez a disposición de los trabajadores de la empresa o establecimiento cumplen con los requisitos de seguridad y salud previstos en la legislación específica relativa al diseño, fabricación y comercialización?', 'en': 'Does the work equipment made available to workers in the company or establishment for the first time comply with the safety and health requirements provided for in the specific legislation on design, manufacturing, and marketing?' },
+            { 'id': 'p8', 'pt': 'O equipamento de trabalho deveria ter afixada a marcação CE?', 'es': '¿El equipo de trabajo debería llevar el marcado CE?', 'en': 'Should the work equipment have the CE marking affixed?' },
+            { 'id': 'p9', 'pt': 'Se sim, o empregador possui a declaração CE?', 'es': 'Si es así, ¿el empleador posee la declaración CE?', 'en': 'If so, does the employer possess the EC declaration?' },
+            { 'id': 'p10', 'pt': 'Os trabalhadores utilizam o equipamento de trabalho em conformidade com o Decreto-Lei 50/2005?', 'es': '¿Los trabajadores utilizan el equipo de trabajo de conformidad con el Decreto-Ley 50/2005?', 'en': 'Do workers use the work equipment in accordance with Decree-Law 50/2005?' }
+        ]},
+        // Artigo 5º
+        { 'article': { 'pt': 'Artigo 5.º - Equipamentos de trabalho com riscos específicos', 'es': 'Artículo 5.º - Equipos de trabajo con riesgos específicos', 'en': 'Article 5 - Work equipment with specific risks' }, 'questions': [
+            { 'id': 'p11', 'pt': 'É visível algum risco específico para a segurança ou a saúde dos trabalhadores na utilização do equipamento de trabalho?', 'es': '¿Es visible algún riesgo específico para la seguridad o la salud de los trabajadores en el uso del equipo de trabajo?', 'en': 'Is there any specific risk to the safety or health of workers visible when using the work equipment?' },
+            { 'id': 'p12', 'pt': 'Se sim, o empregador tomou as medidas necessárias para que a sua utilização, estejam reservadas apenas a(s) operador(es) especificamente habilitado(s) para o efeito, considerando a correspondente actividade?', 'es': 'Si es así, ¿el empleador tomó las medidas necesarias para que su uso esté reservado únicamente al(los) operador(es) específicamente calificado(s) para el efecto, considerando la actividad correspondiente?', 'en': 'If so, has the employer taken the necessary measures to ensure that its use is reserved only to the operator(s) specifically qualified for the purpose, considering the corresponding activity?' }
+        ]},
+        // Artigo 6º
+        { 'article': { 'pt': 'Artigo 6.º - Verificação dos equipamentos de trabalho', 'es': 'Artículo 6.º - Verificación de los equipos de trabajo', 'en': 'Article 6 - Verification of work equipment' }, 'questions': [
+            { 'id': 'p13', 'pt': 'O equipamento de trabalho foi verificado após a instalação ou montagem em novas instalações, antes de iniciar ou retomar o funcionamento?', 'es': '¿El equipo de trabajo fue verificado después de la instalación o montaje en nuevas instalaciones, antes de comenzar o reanudar el funcionamiento?', 'en': 'Was the work equipment checked after installation or assembly in new facilities, before starting or resuming operation?' },
+            { 'id': 'p14', 'pt': 'São realizadas verificações periódicas ao equipamento de trabalho?', 'es': '¿Se realizan verificaciones periódicas al equipo de trabajo?', 'en': 'Are periodic checks carried out on the work equipment?' },
+            { 'id': 'p15', 'pt': 'São efectuados controlos extraordinários dos equipamentos de trabalho quando ocorrem acontecimentos excepcionais (transformações, acidentes, fenómenos naturais ou períodos prolongados de não utilização)?', 'es': '¿Se realizan controles extraordinarios de los equipos de trabajo cuando ocurren eventos excepcionales (transformaciones, accidentes, fenómenos naturales o períodos prolongados de no uso)?', 'en': 'Are extraordinary checks carried out on work equipment when exceptional events occur (transformations, accidents, natural phenomena, or prolonged periods of non-use)?' },
+            { 'id': 'p16', 'pt': 'As verificações foram efectuadas por uma pessoa competente (existem provas dessa competência)?', 'es': '¿Las verificaciones fueron realizadas por una persona competente (existen pruebas de dicha competencia)?', 'en': 'Were the checks carried out by a competent person (is there proof of this competence)?' }
+        ]},
+        // Artigo 7º
+        { 'article': { 'pt': 'Artigo 7.º - Resultados das verificações', 'es': 'Artículo 7.º - Resultados de las verificaciones', 'en': 'Article 7 - Results of checks' }, 'questions': [
+            { 'id': 'p17', 'pt': 'Estão disponíveis os registos de verificação da última verificação e de outras verificações ou ensaios efectuados nos dois anos anteriores?', 'es': '¿Están disponibles los registros de la última verificación y de otras verificaciones o pruebas realizadas en los dos años anteriores?', 'en': 'Are the verification records of the last check and other checks or tests carried out in the two previous years available?' },
+            { 'id': 'p18', 'pt': 'A frequência com que estas verificações e ensaios são efectuados é definida pela empresa (qual)?', 'es': '¿La frecuencia con que se realizan estas verificaciones y pruebas es definida por la empresa (cuál)?', 'en': 'Is the frequency with which these checks and tests are carried out defined by the company (which one)?' },
+            { 'id': 'p19', 'pt': 'Se o equipamento de trabalho for utilizado fora da empresa, é acompanhado de provas materiais da última verificação?', 'es': 'Si el equipo de trabajo se utiliza fuera de la empresa, ¿va acompanhado de pruebas materiales de la última verificación?', 'en': 'If the work equipment is used outside the company, is it accompanied by material proof of the last check?' }
+        ]},
+        // Artigo 8º
+        { 'article': { 'pt': 'Artigo 8.º - Obrigações de formação e informação', 'es': 'Artículo 8.º - Obligaciones de formación e información', 'en': 'Article 8 - Training and information obligations' }, 'questions': [
+            { 'id': 'p20', 'pt': 'Os trabalhadores receberam informações adequadas sobre o equipamento de trabalho utilizado?', 'es': '¿Los trabajadores recibieron información adecuada sobre el equipo de trabajo utilizado?', 'en': 'Have workers received adequate information about the work equipment used?' },
+            { 'id': 'p21', 'pt': 'A informação é facilmente compreensível, escrita, se necessário, e contém, pelo menos, as seguintes indicações:', 'es': '¿La información es fácilmente comprensible, escrita, si es necesario, y contiene, al menos, las siguientes indicaciones?', 'en': 'Is the information easily understandable, written if necessary, and does it contain at least the following indications?' },
+            { 'id': 'p22', 'pt': 'a) Condições de utilização dos equipamentos;', 'es': 'a) Condiciones de uso de los equipos;', 'en': 'a) Conditions for using the equipment;' },
+            { 'id': 'p23', 'pt': 'b) Situações anómalas previsíveis;', 'es': 'b) Situaciones anómalas previsibles;', 'en': 'b) Foreseeable abnormal situations;' },
+            { 'id': 'p24', 'pt': 'c) Conclusões a tirar da experiência eventualmente adquirida com a utilização do equipamento;', 'es': 'c) Conclusiones a extraer de la experiencia eventualmente adquirida con el uso del equipo;', 'en': 'c) Conclusions to be drawn from the experience potentially acquired with the use of the equipment;' },
+            { 'id': 'p25', 'pt': 'd) Riscos para os trabalhadores decorrentes de equipamentos de trabalho existentes no ambiente de trabalho ou de alterações a esses equipamentos que possam afectar a trabalhadores, ainda que não os utilizem directamente.', 'es': 'd) Riesgos para los trabajadores derivados de equipos de trabajo existentes en el ambiente de trabajo o de alteraciones a estos equipos que puedan afectar a trabajadores, aunque no los utilicen directamente.', 'en': 'd) Risks to workers arising from work equipment present in the work environment or from alterations to this equipment that may affect workers, even if they do not use it directly.' }
+        ]},
+        // Artigo 11º
+        { 'article': { 'pt': 'Artigo 11º - Sistemas de comando', 'es': 'Artículo 11º - Sistemas de mando', 'en': 'Article 11 - Control systems' }, 'questions': [
+            { 'id': 'p26', 'pt': 'Os sistemas de controlo dos equipamentos de trabalho que têm impacto na segurança são claramente visíveis, identificáveis e devidamente assinalados?', 'es': '¿Los sistemas de control de los equipos de trabajo que tienen un impacto en la seguridad son claramente visibles, identificables y debidamente señalizados?', 'en': 'Are the control systems of work equipment that impact safety clearly visible, identifiable, and properly marked?' },
+            { 'id': 'p27', 'pt': 'Os sistemas de controlo estão situados fora das zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'es': '¿Los sistemas de control están situados fuera de las zonas perigosas y de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'en': 'Are the control systems located outside the dangerous zones and in a way that their operation, particularly by unintentional manipulation, cannot cause additional risks?' },
+            { 'id': 'p28', 'pt': 'O operador pode certificar-se, a partir do posto de comando principal, de que não há pessoas nas zonas perigosas ou, se tal não for possível, o arranque é automaticamente precedido de um sistema de alerta fiável, em especial um sinal sonoro ou visual.', 'es': 'El operador puede asegurarse, desde el puesto de mando principal, de que no hay personas en las zonas peligrosas o, si no es posible, el arranque está precedido automáticamente por un sistema de alerta fiable, en especial una señal sonora o visual.', 'en': 'The operator can ensure, from the main control station, that there are no people in the dangerous zones or, if not possible, the start-up is automatically preceded by a reliable alert system, especially an audible or visual signal.' },
+            { 'id': 'p29', 'pt': 'Após o aviso previsto no número anterior, o trabalhador exposto dispõe do tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?', 'es': 'Después del aviso previsto en el número anterior, ¿el trabajador expuesto dispone del tiempo y, si es necesario, de los medios indispensables para alejarse inmediatamente de la zona peligrosa?', 'en': 'Following the warning provided in the previous paragraph, does the exposed worker have the time and, if necessary, the indispensable means to immediately move away from the dangerous zone?' },
+            { 'id': 'p30', 'pt': 'Os sistemas de controlo são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?', 'es': '¿Los sistemas de control son seguros y elegidos teniendo en conta los fallos previsibles, las perturbaciones y las limitaciones de la utilización para que foram concebidos?', 'en': 'Are the control systems safe and chosen taking into account foreseeable failures, disturbances, and limitations of the use for which they were designed?' }
+        ]},
+        // Artigo 12º
+        { 'article': { 'pt': 'Artigo 12º - Arranque do equipamento de trabalho', 'es': 'Artículo 12º - Puesta en marcha del equipo de trabajo', 'en': 'Article 12 - Start-up of work equipment' }, 'questions': [
+            { 'id': 'p31', 'pt': 'O equipamento de trabalho está equipado com um sistema de comando de modo a que seja necessária uma acção voluntária sobre um comando para efeitos de:', 'es': '¿El equipo de trabajo está equipado con un sistema de mando de modo a que seja necessária uma acção voluntária sobre um comando para efeitos de:', 'en': 'Is the work equipment fitted with a control system so that a voluntary action on a control is necessary for the purposes of:' },
+            { 'id': 'p32', 'pt': 'a) Colocar o equipamento de trabalho em funcionamento?', 'es': 'a) Poner el equipo de trabajo en funcionamiento?', 'en': 'a) Starting the work equipment?' },
+            { 'id': 'p33', 'pt': 'b) O equipamento arrancar após uma paragem, qualquer que seja a origem desta;', 'es': 'b) Arrancar el equipo después de una parada, cualquiera que sea el origen de esta;', 'en': 'b) The equipment starting after a stop, regardless of its origin;' },
+            { 'id': 'p34', 'pt': 'c) O equipamento sofrerá uma modificação importante das condições de funcionamento, nomeadamente velocidade ou pressão.', 'es': 'c) El equipo sufrirá una modificación importante de las condiciones de funcionamento, nomeadamente velocidade ou pressão.', 'en': 'c) The equipment undergoing a significant modification of the operating conditions, namely speed or pressure.' }
+        ]},
+        // Artigo 13º
+        { 'article': { 'pt': 'Artigo 13º - Paragem do equipamento de trabalho', 'es': 'Artículo 13º - Parada del equipo de trabajo', 'en': 'Article 13 - Stopping of work equipment' }, 'questions': [
+            { 'id': 'p35', 'pt': 'a) O equipamento de trabalho possui um sistema de comando que permita a sua paragem total em condições de segurança?', 'es': 'a) ¿El equipo de trabajo possui um sistema de comando que permita a sua paragem total em condições de segurança?', 'en': 'a) Does the work equipment have a control system that allows its total stop under safe conditions?' },
+            { 'id': 'p36', 'pt': 'b) Em função dos riscos que o equipamento de trabalho apresenta e do tempo normal de paragem, a instalação de um dispositivo de paragem de emergência proporciona mais segurança e está instalado?', 'es': 'b) En função dos riscos que o equipamento de trabalho apresenta e do tempo normal de paragem, ¿a instalação de um dispositivo de paragem de emergência proporciona mais segurança e está instalado?', 'en': 'b) Depending on the risks presented by the work equipment and the normal stopping time, does the installation of an emergency stop device provide more safety and is it installed?' },
+            { 'id': 'p37', 'pt': 'a) Cada posto de trabalho dispõe de um sistema de comando que permite a paragem total ou parcial do equipamento em caso de situação de perigo?', 'es': 'a) ¿Cada posto de trabalho dispõe de um sistema de comando que permite a paragem total ou parcial do equipamento em caso de situação de perigo?', 'en': 'a) Does each work station have a control system that allows the total or partial stop of the equipment in case of a dangerous situation?' },
+            { 'id': 'p38', 'pt': 'b) A ordem de paragem do equipamento de trabalho tem prioridade sobre as ordens de arranque?', 'es': 'b) ¿A ordem de paragem do equipamento de trabalho tem prioridade sobre as ordens de arranque?', 'en': 'b) Does the stopping order of the work equipment take priority over the starting orders?' },
+            { 'id': 'p39', 'pt': 'O fornecimento de energia aos actuadores ou aos seus elementos periféricos é interrompido depois de o equipamento de trabalho ter parado?', 'es': 'O fornecimento de energia aos actuadores ou aos seus elementos periféricos é interrompido depois de o equipamento de trabalho ter parado?', 'en': 'Is the energy supply to the actuators or their peripheral elements interrupted after the work equipment has stopped?' }
+        ]},
+        // Artigo 14º
+        { 'article': { 'pt': 'Artigo 14º - Estabilidade de ruptura', 'es': 'Artículo 14º - Estabilidad de ruptura', 'en': 'Article 14 - Stability against rupture' }, 'questions': [
+            { 'id': 'p40', 'pt': 'O equipamento de trabalho e os seus elementos estão estabilizados por fixação ou por outros meios, se necessário para a segurança ou a saúde dos trabalhadores?', 'es': '¿O equipamento de trabalho e os seus elementos estão estabilizados por fixação ou por outros meios, se necessário para a segurança ou a saúde dos trabalhadores?', 'en': 'Are the work equipment and its elements stabilized by fastening or by other means, if necessary for the safety or health of workers?' },
+            { 'id': 'p41', 'pt': 'Se existirem riscos de estilhaçamento ou de rotura de elementos do equipamento susceptíveis de pôr em perigo a segurança ou a saúde dos trabalhadores foram tomadas as medidas de protecção adequado?', 'es': 'Se existirem riscos de estilhaçamento ou de rotura de elementos do equipamento susceptíveis de pôr em perigo a segurança ou a saúde dos trabalhadores foram tomadas as medidas de protecção adequado?', 'en': 'If there are risks of splintering or rupture of equipment elements likely to endanger the safety or health of workers, were adequate protection measures taken?' }
+        ]},
+        // Artigo 15º
+        { 'article': { 'pt': 'Artigo 15º - Projecções e emanações', 'es': 'Artículo 15º - Proyecciones y emanaciones', 'en': 'Article 15 - Projections and emissions' }, 'questions': [
+            { 'id': 'p42', 'pt': 'Se no equipamento de trabalho existirem riscos devido a quedas ou projecções de objectos, dispõe de dispositivos de segurança adequados?', 'es': 'Se no equipamento de trabalho existirem riscos devido a quedas ou projecções de objectos, dispõe de dispositivos de segurança adequados?', 'en': 'If there are risks due to falling or projecting objects in the work equipment, does it have adequate safety devices?' },
+            { 'id': 'p43', 'pt': 'Se no equipamento de trabalho existirem riscos devido a emanações de gases, vapores ou líquidos ou a emissão de poeiras, dipõe de dispositivos de retenção ou extracção eficazes, instalados na proximidade da respectiva fonte?', 'es': 'Se no equipamento de trabalho existirem riscos devido a emanações de gases, vapores ou líquidos ou a emissão de poeiras, dipõe de dispositivos de retenção ou extracção eficazes, instalados na proximidade da respectiva fonte?', 'en': 'If there are risks due to emissions of gases, vapours, or liquids or the emission of dust in the work equipment, does it have effective containment or extraction devices, installed near the respective source?' }
+        ]},
+        // Artigo 16º
+        { 'article': { 'pt': 'Artigo 16º - Riscos de contacto mecânico', 'es': 'Artículo 16º - Riesgos de contacto mecánico', 'en': 'Article 16 - Mechanical contact risks' }, 'questions': [
+            { 'id': 'p44', 'pt': 'Os elementos móveis do equipamento de trabalho que possam causar acidentes por contacto mecânico possuem protectores que impeçam o acesso às zonas perigosas ou de dispositivos que interrompam o movimento dos elementos móveis antes do acesso a essas zonas?', 'es': 'Os elementos móveis do equipamento de trabalho que possam causar acidentes por contacto mecânico possuem protectores que impeçam o acesso às zonas perigosas ou de dispositivos que interrompam o movimento dos elementos móveis antes do acesso a essas zonas?', 'en': 'Do the moving parts of the work equipment that may cause accidents through mechanical contact have guards that prevent access to dangerous areas or devices that interrupt the movement of the moving parts before accessing these areas?' },
+            { 'id': 'p45', 'pt': 'Protectores e dispositivos de protecção:', 'es': 'Protectores e dispositivos de proteção:', 'en': 'Guards and protection devices:' },
+            { 'id': 'p46', 'pt': 'a) São de construção robusta;', 'es': 'a) São de construção robusta;', 'en': 'a) Are of robust construction;' },
+            { 'id': 'p47', 'pt': 'b) Não ocasionam riscos suplementares;', 'es': 'b) Não ocasionam riscos suplementares;', 'en': 'b) Do not cause supplementary risks;' },
+            { 'id': 'p48', 'pt': 'c) Não podem ser facilmente neutralizados ou tornados inoperacionais;', 'es': 'c) Não podem ser facilmente neutralizados ou tornados inoperacionais;', 'en': 'c) Cannot be easily neutralised or made inoperable;' },
+            { 'id': 'p49', 'pt': 'd) Estão situados a uma distância suficiente da zona perigosa;', 'es': 'd) Estão situados a uma distância suficiente da zona perigosa;', 'en': 'd) Are located at a sufficient distance from the dangerous zone;' },
+            { 'id': 'p50', 'pt': 'e) Não limitam a observação do ciclo de trabalho mais do que o necessário.', 'es': 'e) Não limitam a observação do ciclo de trabalho mais do que o necessário.', 'en': 'e) Do not limit the observation of the work cycle more than necessary.' }
+        ]},
+        // Artigo 17º
+        { 'article': { 'pt': 'Artigo 17º - Iluminação e temperatura', 'es': 'Artículo 17º - Iluminación y temperatura', 'en': 'Article 17 - Lighting and temperature' }, 'questions': [
+            { 'id': 'p51', 'pt': 'As zonas e os pontos de trabalho ou de manutenção dos equipamentos de trabalho estão suficientemente iluminados em função das tarefas a executar?', 'es': 'As zonas e os pontos de trabalho ou de manutenção dos equipamentos de trabalho estão suficientemente iluminados em função das tarefas a executar?', 'en': 'Are the work or maintenance zones and points of the work equipment sufficiently lit according to the tasks to be carried out?' },
+            { 'id': 'p52', 'pt': 'As partes do equipamento de trabalho que atingem temperaturas elevadas ou muito baixas estão protegidas contra o risco de contacto ou proximidade por parte dos trabalhadores?', 'es': 'As partes do equipamento de trabalho que atingem temperaturas elevadas ou muito baixas estão protegidas contra o risco de contacto ou proximidade por parte dos trabalhadores?', 'en': 'Are the parts of the work equipment that reach high or very low temperatures protected against the risk of contact or proximity by workers?' }
+        ]},
+        // Artigo 18º
+        { 'article': { 'pt': 'Artigo 18º - Dispositivos de aviso', 'es': 'Artículo 18º - Dispositivos de aviso', 'en': 'Article 18 - Warning devices' }, 'questions': [
+            { 'id': 'p53', 'pt': 'Os dispositivos de alerta são ouvidos e compreendidos de forma fácil e inequívoca?', 'es': 'Os dispositivos de alerta são ouvidos e compreendidos de forma fácil e inequívoca?', 'en': 'Are the warning devices easily and unequivocally heard and understood?' }
+        ]},
+        // Artigo 19º
+        { 'article': { 'pt': 'Artigo 19º - Manutenção do equipamento', 'es': 'Artículo 19º - Mantenimiento del equipo', 'en': 'Article 19 - Equipment maintenance' }, 'questions': [
+            { 'id': 'p54', 'pt': 'As operações de manutenção podem ser efectuadas com os equipamentos de trabalho parados ou, se tal não for possível, podem ser efectuadas fora das zonas perigosas?', 'es': 'As operações de manutenção podem ser efectuadas com os equipamentos de trabalho parados ou, se tal não for possível, podem ser efectuadas fora das zonas perigosas?', 'en': 'Can maintenance operations be carried out with the work equipment stopped or, if not possible, can they be carried out outside the dangerous zones?' },
+            { 'id': 'p55', 'pt': 'O equipamento de trabalho tem um registo de manutenção? Está actualizado?', 'es': 'O equipamento de trabalho tem um registo de manutenção? Está actualizado?', 'en': 'Does the work equipment have a maintenance record? Is it up to date?' }
+        ]},
+        // Artigo 20º
+        { 'article': { 'pt': 'Artigo 20º - Riscos eléctricos, de incêndio e de explosão', 'es': 'Artículo 20º - Riesgos eléctricos, de incendio y de explosión', 'en': 'Article 20 - Electrical, fire, and explosion risks' }, 'questions': [
+            { 'id': 'p56', 'pt': 'O equipamento de trabalho é adequado para proteger os trabalhadores expostos contra os riscos de contacto directo ou indirecto com a electricidade?', 'es': 'O equipamento de trabalho é adequado para proteger os trabalhadores expostos contra os riscos de contacto directo ou indirecto com a electricidade?', 'en': 'Is the work equipment suitable for protecting exposed workers against the risks of direct or indirect contact with electricity?' },
+            { 'id': 'p57', 'pt': 'O equipamento de trabalho está adequado para proteger os trabalhadores contra os riscos de:', 'es': 'O equipamento de trabalho está adequado para proteger os trabalhadores contra os riscos de:', 'en': 'Is the work equipment suitable for protecting workers against the risks of:' },
+            { 'id': 'p58', 'pt': '- Incêndio ou incêndio provocado pelo equipamento?', 'es': ' - Incêndio ou incêndio provocado pelo equipamento?', 'en': ' - Fire or fire caused by the equipment?' },
+            { 'id': 'p59', 'pt': '- Emanações de gases, pó ou vapores produzidos, utilizados ou armazenados pelo equipamento?', 'es': ' - Emanações de gases, pó ou vapores produzidos, utilizados ou armazenados pelo equipamento?', 'en': ' - Emissions of gases, dust, or vapours produced, used, or stored by the equipment?' },
+            { 'id': 'p60', 'pt': '- Libertação de líquidos ou outras substâncias produzidas, utilizadas ou armazenadas pelo equipamento?', 'es': ' - Libertação de líquidos ou outras substâncias produzidas, utilizadas ou armazenadas pelo equipamento?', 'en': ' - Release of liquids or other substances produced, used, or stored by the equipment?' },
+            { 'id': 'p61', 'pt': 'Os equipamentos de trabalho são adequados para evitar o risco de explosão dos equipamentos ou das substâncias por eles produzidas ou das substâncias neles utilizadas ou armazenadas.', 'es': 'Os equipamentos de trabalho são adequados para evitar o risco de explosão dos equipamentos ou das substâncias por eles produzidas ou das substâncias neles utilizadas ou armazenadas.', 'en': 'Is the work equipment suitable for preventing the risk of explosion of the equipment or the substances produced by them or the substances used or stored in them.' }
+        ]},
+        // Artigo 21º
+        { 'article': { 'pt': 'Artigo 21º - Fontes de energia', 'es': 'Artículo 21º - Fuentes de energía', 'en': 'Article 21 - Energy sources' }, 'questions': [
+            { 'id': 'p62', 'pt': 'O equipamento de trabalho dispõe de dispositivos que permitem isolá-lo de cada uma das suas fontes de energia externas?', 'es': 'O equipamento de trabalho dispõe de dispositivos que permitem isolá-lo de cada uma das suas fontes de energia externas?', 'en': 'Does the work equipment have devices that allow it to be isolated from each of its external energy sources?' },
+            { 'id': 'p63', 'pt': 'Os dispositivos de isolamento da fonte de energia são claramente identificáveis?', 'es': 'Os dispositivos de isolamento da fonte de energia são claramente identificáveis?', 'en': 'Are the energy source isolation devices clearly identifiable?' },
+            { 'id': 'p64', 'pt': 'Não existe qualquer risco para os trabalhadores em caso de reconexão das fontes de energia?', 'es': 'Não existe qualquer risco para os trabalhadores em caso de reconexão das fontes de energia?', 'en': 'Is there no risk to workers in case of reconnection of the energy sources?' }
+        ]},
+        // Artigo 22º
+        { 'article': { 'pt': 'Artigo 22º - Sinalização de segurança', 'es': 'Artículo 22º - Señalización de seguridad', 'en': 'Article 22 - Safety signs' }, 'questions': [
+            { 'id': 'p65', 'pt': 'O equipamento de trabalho tem os avisos e marcações necessários para garantir a segurança dos trabalhadores?', 'es': 'O equipamento de trabalho tem os avisos e marcações necessários para garantir a segurança dos trabalhadores?', 'en': 'Does the work equipment have the necessary warnings and markings to ensure the safety of workers?' }
+        ]}
+    ]
+};
+
+// Função para gerar o HTML da tabela (MANTIDA A MESMA)
+function generateTable(lang) {
+    const tbody = document.querySelector('tbody');
+    tbody.innerHTML = ''; // Limpa o conteúdo existente
+
+    translations.content.forEach(articleGroup => {
+        // Linha do Título do Artigo
+        const articleRow = document.createElement('tr');
+        articleRow.className = 'titulo-artigo';
+        articleRow.innerHTML = `<td colspan='5'>${articleGroup.article[lang]}</td>`;
+        tbody.appendChild(articleRow);
+
+        // Linhas das Perguntas
+        articleGroup.questions.forEach(q => {
+            const questionRow = document.createElement('tr');
+            questionRow.className = 'pergunta';
+            questionRow.innerHTML = `
+                <td>${q[lang]}</td>
+                <td><input type='radio' name='${q.id}' value='sim'></td>
+                <td><input type='radio' name='${q.id}' value='nao'></td>
+                <td><input type='radio' name='${q.id}' value='np'></td>
+                <td><textarea class='obs'></textarea></td>
+            `;
+            tbody.appendChild(questionRow);
+        });
+    });
+}
+
+// Função para alterar o idioma (MODIFICADA para remover a tradução do label, que não existe mais)
+function changeLanguage(lang) {
+    // 1. Traduzir o título da página e o título principal
+    document.getElementById('pageTitle').textContent = translations.pageTitle[lang];
+    document.getElementById('mainTitle').textContent = translations.mainTitle[lang];
+
+    // 2. Traduzir os cabeçalhos da tabela
+    const headers = translations.tableHeaders[lang];
+    const headerRow = document.getElementById('tableHeaders');
+    headerRow.innerHTML = `<th>${headers[0]}</th><th>${headers[1]}</th><th>${headers[2]}</th><th>${headers[3]}</th><th>${headers[4]}</th>`;
+
+    // 3. Gerar o novo corpo da tabela com as traduções
+    generateTable(lang);
+
+    // 4. (REMOVIDO: a tradução do label)
+}
+
+// Inicializar a tabela no idioma padrão (Português) ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+    changeLanguage('pt');
+});
+
+</script>
+
+</body>
+</html>
