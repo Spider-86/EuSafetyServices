@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Estudo de Segurança</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -12,6 +12,7 @@
         color: #F4F3F2;
     }
 
+    /* TOPO */
     .topo {
         display: flex;
         align-items: center;
@@ -47,6 +48,7 @@
         color: #F4F3F2;
     }
 
+    /* CAIXAS */
     .item, .study-box {
         border: 1px solid #555;
         padding: 15px;
@@ -55,21 +57,22 @@
         background-color: #3A3A3A;
     }
 
+    /* Distância entre linhas */
     .item label,
-	.item textarea,
-	.item select,
-	.item .plCalc {
- 	   margin-bottom: 6px;
-  	  display: block;
-	}
+    .item textarea,
+    .item select,
+    .item .plCalc {
+        margin-bottom: 6px;
+        display: block;
+    }
+    input[type="file"] {
+        margin-bottom: 8px; 
+    }
 
-	input[type="file"] {
-        margin-bottom: 8px;
-	}
-
-	.item textarea.descricao {
-	    width: 450px;
-	}
+    /* Tamanho das caixas de texto*/
+    .item textarea.descricao {
+        width: 450px; /* ~60 caracteres */
+    }
 
     @media (max-width: 600px) {
         .item textarea.descricao,
@@ -80,11 +83,11 @@
         }
     }
 
-	.item select.S,
-	.item select.F,
-	.item select.P {
-        width: 250px;
-	}
+    .item select.S,
+    .item select.F,
+    .item select.P {
+        width: 250px; 
+    }
 
     textarea, input[type="text"], input[type="number"], select {
         width: 100%;
@@ -96,12 +99,13 @@
         box-sizing: border-box;
     }
 
+    /* Specific widths */
     #cliente, #maquina {
-        width: 450px;
+        width: 450px; /* approx 60 characters */
     }
 
     #ano {
-        width: 70px;
+        width: 70px; /* fits 4 digits */
         text-align: center;
     }
 
@@ -138,37 +142,39 @@
 </head>
 <body>
 
+<!-- TOP BAR -->
 <div class="topo">
-    <img src="https://www.euchner.pt/wp-content/themes/euchner/img/logo.png" class="logo" alt="logo">
+    <img src="https://www.euchner.pt/wp-content/themes/euchner/img/logo.png" class="logo" alt="logo" />
 
     <h2 id="titulo">Estudo de Segurança</h2>
 
     <div class="idioma-container">
         <select id="langSelect" onchange="atualizarIdioma()">
-            <option value="pt">PT</option>
+            <option value="pt" selected>PT</option>
             <option value="es">ES</option>
             <option value="en">EN</option>
         </select>
     </div>
 </div>
 
+<!-- STUDY INFO -->
 <div class="study-box">
-    <h3 id="studyTitle">Relatório Estudo de Segurnça</h3>
+    <h3 id="studyTitle">Relatório Estudo de Segurança</h3>
 
     <label for="cliente" id="lblCliente" class="inline">Cliente:</label>
-    <input type="text" id="cliente">
+    <input type="text" id="cliente" maxlength="60" placeholder="Nome do cliente" />
 
     <label for="maquina" id="lblMaquina" class="inline">Nome e Modelo da Máquina:</label>
-    <input type="text" id="maquina">
+    <input type="text" id="maquina" maxlength="60" placeholder="Ex: Máquina XYZ" />
 
     <label for="ano" id="lblAno" class="inline">Ano de Fabrico:</label>
-    <input type="text" id="ano" maxlength="4">
+    <input type="text" id="ano" maxlength="4" placeholder="2025" />
 
     <label for="fotoCE" id="lblCE" class="inline">Marcação CE da Máquina:</label>
-    <input type="file" accept="image/*" capture="camera" id="fotoCE">
+    <input type="file" accept="image/*" capture="camera" id="fotoCE" />
 
     <label for="fotoGeral" id="lblGeral" class="inline">Foto Geral da Máquina:</label>
-    <input type="file" accept="image/*" capture="camera" id="fotoGeral">
+    <input type="file" accept="image/*" capture="camera" id="fotoGeral" />
 </div>
 
 <div id="container"></div>
@@ -177,91 +183,218 @@
 <button id="btnPDF" onclick="gerarPDF()">Gerar PDF</button>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
 <script>
-
-/* ---------------------------------------------------------------------
-      TEXTOS MULTILINGUE  (mantive exatamente como tinhas)
------------------------------------------------------------------------- */
 const textos = {
-    pt: { /* ... mantém igual ... */ },
-    es: { /* ... mantém igual ... */ },
-    en: { /* ... mantém igual ... */ }
+    pt: {
+        titulo: "Estudo de Segurança",
+        studyTitle: "Relatório de Estudo de Segurança",
+        cliente: "Cliente:",
+        maquina: "Nome e Modelo da Máquina:",
+        ano: "Ano de Fabrico:",
+        ce: "Marcação CE da Máquina:",
+        geral: "Foto Geral da Máquina:",
+        descricao: "Descrição:",
+        plCalculado: "PL calculado:",
+        severidade: "Severidade da lesão (S):",
+        frequencia: "Frequência / exposição ao perigo (F):",
+        possibilidade: "Possibilidade de evitar (P):",
+        fotos: "Fotos",
+        foto: "Foto",
+        addFuncao: "Adicionar Função",
+        gerarPDF: "Gerar PDF",
+        funcao: "Função"
+    },
+    es: {
+        titulo: "Informe Estudio de Seguridad",
+        studyTitle: "Información del Estudio",
+        cliente: "Cliente:",
+        maquina: "Nombre y Modelo de la Máquina:",
+        ano: "Año de Fabricación:",
+        ce: "Marcado CE de la Máquina:",
+        geral: "Foto General de la Máquina:",
+        descricao: "Descripción:",
+        plCalculado: "PL calculado:",
+        severidade: "Gravedad de la lesión (S):",
+        frequencia: "Frecuencia / exposición al peligro (F):",
+        possibilidade: "Posibilidad de evitar (P):",
+        fotos: "Fotos",
+        foto: "Foto",
+        addFuncao: "Añadir Función",
+        gerarPDF: "Generar PDF",
+        funcao: "Función"
+    },
+    en: {
+        titulo: "Safety Study Report",
+        studyTitle: "Study Information",
+        cliente: "Client:",
+        maquina: "Machine Name and Model:",
+        ano: "Year of Manufacture:",
+        ce: "Machine CE Marking:",
+        geral: "General Machine Photo:",
+        descricao: "Description:",
+        plCalculado: "Calculated PL:",
+        severidade: "Severity of injury (S):",
+        frequencia: "Frequency / exposure to hazard (F):",
+        possibilidade: "Possibility of avoiding (P):",
+        fotos: "Photos",
+        foto: "Photo",
+        addFuncao: "Add Function",
+        gerarPDF: "Generate PDF",
+        funcao: "Function"
+    }
 };
 
 let contador = 0;
 
-function atualizarIdioma(){ /* ... igual ... */ }
+function atualizarIdioma() {
+    const lang = document.getElementById("langSelect").value;
+    const t = textos[lang];
 
-function addItem(){ /* ... igual ... */ }
+    document.getElementById("titulo").innerText = t.titulo;
+    document.getElementById("studyTitle").innerText = t.studyTitle;
+    document.getElementById("lblCliente").innerText = t.cliente;
+    document.getElementById("lblMaquina").innerText = t.maquina;
+    document.getElementById("lblAno").innerText = t.ano;
+    document.getElementById("lblCE").innerText = t.ce;
+    document.getElementById("lblGeral").innerText = t.geral;
 
-function atualizarPL(el){ /* ... igual ... */ }
-function calcularPL(item){ /* ... igual ... */ }
+    document.getElementById("btnAdd").innerText = t.addFuncao;
+    document.getElementById("btnPDF").innerText = t.gerarPDF;
 
-
-/* ======================================================================
-      🔥  CORREÇÃO DEFINITIVA DE ROTAÇÃO PARA iPHONE  (Chrome/Safari)
-   ====================================================================== */
-
-async function fileToDataURL(file){
-    return new Promise((resolve, reject) => {
-
-        const reader = new FileReader();
-
-        reader.onload = function(e){
-            const img = new Image();
-
-            img.onload = function(){
-
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext("2d");
-
-                const w = img.width;
-                const h = img.height;
-
-                // --------- AQUI ESTÁ A SOLUÇÃO QUE FUNCIONA NO IPHONE -------------
-                // iPhone devolve sempre landscape mesmo quando é portrait
-                // Por isso: se width > height → roda 90°
-                if (w > h) { 
-                    canvas.width = h;
-                    canvas.height = w;
-                    ctx.translate(h, 0);
-                    ctx.rotate(90 * Math.PI / 180);
-                } else {
-                    canvas.width = w;
-                    canvas.height = h;
-                }
-
-                ctx.drawImage(img, 0, 0);
-
-                resolve(canvas.toDataURL("image/jpeg", 0.92));
-            };
-
-            img.src = e.target.result;
-        };
-
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
+    document.querySelectorAll(".item").forEach((item, idx) => {
+        item.querySelector(".hFuncao").innerText = `${t.funcao} ${idx+1}`;
+        item.querySelector(".lblDescricao").innerText = t.descricao;
+        item.querySelector(".lblS").innerText = t.severidade;
+        item.querySelector(".lblF").innerText = t.frequencia;
+        item.querySelector(".lblP").innerText = t.possibilidade;
+        item.querySelector(".plCalc").innerText = t.plCalculado;
+        item.querySelector(".lblFotos").innerText = t.fotos;
+        item.querySelectorAll(".lblFoto").forEach((f,i)=> f.innerText = `${t.foto} ${i+1}:`);
     });
 }
 
-/* ----------------------------------------------------------------------
-   Adicionar imagens ao PDF (igual ao teu)
------------------------------------------------------------------------- */
-async function addImageFullSize(doc, dataUrl, x, y, maxW=180, maxH=120){
-    return new Promise(resolve=>{
+function addItem() {
+    contador++;
+    const lang = document.getElementById("langSelect").value;
+    const t = textos[lang];
+
+    const div = document.createElement("div");
+    div.className = "item";
+
+    div.innerHTML = `
+        <h3 class="hFuncao">${t.funcao} ${contador}</h3>
+
+        <label class="lblDescricao">${t.descricao}</label>
+        <textarea class="descricao" rows="3"></textarea>
+
+        <label class="lblS">${t.severidade}</label>
+        <select class="S" onchange="atualizarPL(this)">
+            <option value="S1">S1 - Lesão leve</option>
+            <option value="S2">S2 - Lesão grave incluindo morte</option>
+        </select>
+
+        <label class="lblF">${t.frequencia}</label>
+        <select class="F" onchange="atualizarPL(this)">
+            <option value="F1">F1 - Raramente a frequente</option>
+            <option value="F2">F2 - Frequente a contínuo</option>
+        </select>
+
+        <label class="lblP">${t.possibilidade}</label>
+        <select class="P" onchange="atualizarPL(this)">
+            <option value="P1">P1 - Possível</option>
+            <option value="P2">P2 - Quase impossível</option>
+        </select>
+
+        <div class="plCalc">${t.plCalculado} <span class="plDisplay">—</span></div>
+
+        <label class="lblFotos">${t.fotos}</label>
+        <label class="lblFoto">${t.foto} 1:</label>
+        <input type="file" accept="image/*" capture="camera" class="foto1" />
+
+        <label class="lblFoto">${t.foto} 2:</label>
+        <input type="file" accept="image/*" capture="camera" class="foto2" />
+
+        <label class="lblFoto">${t.foto} 3:</label>
+        <input type="file" accept="image/*" capture="camera" class="foto3" />
+    `;
+
+    document.getElementById("container").appendChild(div);
+    atualizarPL(div);
+}
+
+function atualizarPL(el) {
+    const item = el.closest(".item");
+    const val = calcularPL(item);
+    item.querySelector(".plDisplay").innerText = val || '—';
+}
+
+function calcularPL(item) {
+    const S = item.querySelector(".S").value;
+    const F = item.querySelector(".F").value;
+    const P = item.querySelector(".P").value;
+    const key = S+F+P;
+    const map = {
+        'S1F1P1':'a','S1F1P2':'b','S1F2P1':'b','S1F2P2':'c',
+        'S2F1P1':'c','S2F1P2':'d','S2F2P1':'d','S2F2P2':'e'
+    };
+    return map[key] || '—';
+}
+
+function fileToDataURL(file){
+    return new Promise((resolve, reject) => {
         const img = new Image();
-        img.onload = ()=>{
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+            const w = img.width;
+            const h = img.height;
+            const proporcao = w / h;
+            const isLikelyIphonePortrait = w > h && (proporcao > 1.3 && proporcao < 1.6);
+            if (isLikelyIphonePortrait) {
+                const canvas = document.createElement('canvas');
+                canvas.width = h;
+                canvas.height = w;
+                const ctx = canvas.getContext('2d');
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.rotate(90 * Math.PI / 180);
+                ctx.drawImage(img, -w / 2, -h / 2);
+                canvas.toBlob(blob => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        URL.revokeObjectURL(url);
+                        resolve(reader.result);
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                }, 'image/jpeg');
+            } else {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    URL.revokeObjectURL(url);
+                    resolve(reader.result);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            }
+        };
+        img.onerror = () => {
+            URL.revokeObjectURL(url);
+            reject(new Error("Erro ao carregar imagem"));
+        };
+        img.src = url;
+    });
+}
+
+async function addImageFullSize(doc, dataUrl, x, y, maxW = 180, maxH = 120){
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
             const pxToMm = px => px * 25.4 / 96;
             let w = pxToMm(img.width);
             let h = pxToMm(img.height);
-
-            if(w > maxW || h > maxH){
-                const ratio = Math.min(maxW/w, maxH/h);
-                w *= ratio;
-                h *= ratio;
+            if (w > maxW || h > maxH) {
+                const r = Math.min(maxW / w, maxH / h);
+                w *= r; h *= r;
             }
-
             doc.addImage(dataUrl, 'JPEG', x, y, w, h);
             resolve(h + 8);
         };
@@ -269,12 +402,94 @@ async function addImageFullSize(doc, dataUrl, x, y, maxW=180, maxH=120){
     });
 }
 
-/* ----------------------------------------------------------------------
-    Gerar PDF (igual ao teu)
------------------------------------------------------------------------- */
-async function gerarPDF(){ /* ... igual ao teu ... */ }
+async function gerarPDF(){
+    if (!window.jspdf || !window.jspdf.jsPDF){
+        alert('Biblioteca jsPDF não carregada.');
+        return;
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit:'mm', format:'a4', orientation:'portrait' });
+    const lang = document.getElementById('langSelect').value;
+    const t = textos[lang];
+
+    let y = 12;
+
+    try {
+        const logoResp = await fetch('https://www.euchner.pt/wp-content/themes/euchner/img/logo.png', {mode:'cors'});
+        const logoBlob = await logoResp.blob();
+        const logoDataUrl = await new Promise(res=>{
+            const r = new FileReader(); r.onload = ()=>res(r.result); r.readAsDataURL(logoBlob);
+        });
+        const logoW = 70; const logoX = (210 - logoW) / 2;
+        await addImageFullSize(doc, logoDataUrl, logoX, y, 70, 20);
+        y += 28;
+    } catch(e){
+        console.warn('Logo: ', e);
+    }
+
+    doc.setFontSize(14);
+    doc.setTextColor(0);
+    doc.text(t.studyTitle, 10, y); y += 8;
+    doc.setFontSize(11);
+    doc.text(`${t.cliente} ${document.getElementById('cliente').value || ''}`, 10, y); y += 6;
+    doc.text(`${t.maquina} ${document.getElementById('maquina').value || ''}`, 10, y); y += 6;
+    doc.text(`${t.ano} ${document.getElementById('ano').value || ''}`, 10, y); y += 8;
+
+    const fotoCEFile = document.getElementById('fotoCE').files[0];
+    if (fotoCEFile) {
+        doc.setFontSize(11);
+        doc.text(t.ce, 10, y); y += 6;
+        const dataUrl = await fileToDataURL(fotoCEFile);
+        y += await addImageFullSize(doc, dataUrl, 10, y);
+    }
+
+    const fotoGeralFile = document.getElementById('fotoGeral').files[0];
+    if (fotoGeralFile) {
+        doc.setFontSize(11);
+        doc.text(t.geral, 10, y); y += 6;
+        const dataUrl = await fileToDataURL(fotoGeralFile);
+        y += await addImageFullSize(doc, dataUrl, 10, y);
+    }
+
+    const items = document.querySelectorAll(".item");
+    for (let i=0; i<items.length; i++) {
+        if (y > 260) {
+            doc.addPage();
+            y = 12;
+        }
+        const item = items[i];
+        doc.setFontSize(12);
+        doc.text(`${t.funcao} ${i+1}`, 10, y); y += 6;
+        doc.setFontSize(10);
+        doc.text(item.querySelector(".descricao").value || '-', 10, y, { maxWidth: 190 });
+        y += 15;
+
+        const pl = item.querySelector(".plDisplay").innerText;
+        doc.text(`${t.plCalculado} ${pl}`, 10, y); y += 6;
+
+        doc.text(`${t.severidade} ${item.querySelector(".S").value}`, 10, y); y += 6;
+        doc.text(`${t.frequencia} ${item.querySelector(".F").value}`, 10, y); y += 6;
+        doc.text(`${t.possibilidade} ${item.querySelector(".P").value}`, 10, y); y += 8;
+
+        // Fotos
+        for (let j=1; j<=3; j++) {
+            const fileInput = item.querySelector(`.foto${j}`);
+            if (fileInput && fileInput.files.length > 0) {
+                if (y > 260) {
+                    doc.addPage();
+                    y = 12;
+                }
+                const dataUrl = await fileToDataURL(fileInput.files[0]);
+                y += await addImageFullSize(doc, dataUrl, 10, y);
+            }
+        }
+    }
+
+    doc.save("estudo-seguranca.pdf");
+}
 
 atualizarIdioma();
+
 </script>
 
 </body>
