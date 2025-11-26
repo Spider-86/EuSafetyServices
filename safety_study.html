@@ -5,28 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title id="pageTitle">Checklist Equipamentos de Trabalho</title>
 <style>
-/* O CSS foi modificado para posicionar o seletor */
+/* CSS GERAL */
 body { font-family: Arial, sans-serif; padding: 20px; margin:0; background-color: #2D2D2D; color:#F4F3F2; }
 h1 { color:#F4F3F2; margin-bottom: 20px; }
 
-/* NOVO: Estilos para posicionar no canto superior direito */
+/* SELETOR DE IDIOMA (Canto superior direito) */
 .language-selector {
-    position: absolute; /* Permite posicionar o elemento */
-    top: 20px; /* Distância do topo */
-    right: 20px; /* Distância da direita */
-    z-index: 1000; /* Garante que fique acima de outros elementos */
+    position: absolute; 
+    top: 20px; 
+    right: 20px; 
+    z-index: 1000;
 }
 .language-selector select { 
     padding: 5px; 
     border-radius: 4px; 
     background-color: #3A3A3A; 
     border: 1px solid #555;
-    color: #F4F3F2; /* Cor do texto */
+    color: #F4F3F2; 
     font-size: 16px; 
     font-weight: bold;
 }
-/* FIM NOVO */
 
+/* NOVOS CAMPOS (Cliente e Projeto) */
+.project-info-container {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    background-color: #333;
+}
+.input-group {
+    display: flex; /* Alinha label e input */
+    align-items: center;
+    margin-bottom: 8px;
+}
+.input-group label {
+    width: 150px; /* Largura fixa para alinhar os inputs */
+    font-weight: bold;
+    flex-shrink: 0;
+}
+.info-input {
+    flex-grow: 1;
+    max-width: 350px; /* Largura visual para simular 50 caracteres */
+    padding: 6px;
+    border-radius: 4px;
+    border: 1px solid #777;
+    background-color: #4A4A4A;
+    color: #F4F3F2;
+    box-sizing: border-box;
+}
+
+/* ESTILOS DA TABELA */
 .table-container { overflow-x:auto; -webkit-overflow-scrolling: touch; }
 table { width:100%; border-collapse: collapse; min-width:700px; background-color:#3A3A3A; border-radius:8px; overflow:hidden; }
 th, td { padding:8px; border:1px solid #555; vertical-align:top; word-wrap:break-word; }
@@ -49,6 +78,16 @@ input[type=radio] { display:block; margin:0 auto; }
 
 <h1 id="mainTitle">DISPOSIÇÕES MÍNIMAS GERAIS APLICÁVEIS AOS EQUIPAMENTOS DE TRABALHO - ANEXO I</h1>
 
+<div class="project-info-container">
+    <div class="input-group">
+        <label id="clientLabel" for="client-name">Nome do Cliente:</label>
+        <input type="text" id="client-name" maxlength="50" class="info-input">
+    </div>
+    <div class="input-group">
+        <label id="projectLabel" for="project-name">Nome do Projeto:</label>
+        <input type="text" id="project-name" maxlength="50" class="info-input">
+    </div>
+</div>
 <div class="table-container">
 <table>
 <thead>
@@ -62,7 +101,7 @@ input[type=radio] { display:block; margin:0 auto; }
 </div>
 
 <script>
-// Objeto que armazena todas as traduções (MANTIDO O MESMO)
+// Objeto que armazena todas as traduções
 const translations = {
     // Títulos da Página e Tabela
     'pageTitle': {
@@ -75,13 +114,24 @@ const translations = {
         'es': 'DISPOSICIONES MÍNIMAS GENERALES APLICABLES A LOS EQUIPOS DE TRABAJO - ANEXO I',
         'en': 'MINIMUM GENERAL PROVISIONS APPLICABLE TO WORK EQUIPMENT - ANNEX I'
     },
+    // NOVAS TRADUÇÕES PARA OS CAMPOS
+    'clientLabel': {
+        'pt': 'Nome do Cliente:',
+        'es': 'Nombre del Cliente:',
+        'en': 'Client Name:'
+    },
+    'projectLabel': {
+        'pt': 'Nome do Projeto:',
+        'es': 'Nombre del Proyecto:',
+        'en': 'Project Name:'
+    },
     'tableHeaders': {
         'pt': ['REQUISITO', 'SIM', 'NÃO', 'NP', 'OBSERVAÇÕES'],
         'es': ['REQUISITO', 'SÍ', 'NO', 'NA', 'OBSERVACIONES'],
         'en': ['REQUIREMENT', 'YES', 'NO', 'NA', 'OBSERVATIONS']
     },
 
-    // Conteúdo da Tabela (MANTIDO O MESMO - 65 perguntas)
+    // Conteúdo da Tabela (Artigos e Perguntas) - MANTIDO O MESMO
     'content': [
         // Artigo 3º
         { 'article': { 'pt': 'Artigo 3º - Obrigações gerais do empregador', 'es': 'Artículo 3º - Obligaciones generales del empleador', 'en': 'Article 3 - General obligations of the employer' }, 'questions': [
@@ -94,7 +144,7 @@ const translations = {
         // Artigo 4º
         { 'article': { 'pt': 'Artigo 4.º - Prescrições mínimas de segurança e regras de utilização dos equipamentos de trabalho', 'es': 'Artículo 4.º - Prescripciones mínimas de seguridad y reglas de uso de los equipos de trabajo', 'en': 'Article 4 - Minimum safety requirements and rules for the use of work equipment' }, 'questions': [
             { 'id': 'p6', 'pt': 'O equipamento de trabalho satisfaz os requisitos mínimos de segurança previstos no Decreto-Lei 50/2005?', 'es': '¿El equipo de trabajo cumple con los requisitos mínimos de seguridad previstos en el Decreto-Ley 50/2005?', 'en': 'Does the work equipment meet the minimum safety requirements provided for in Decree-Law 50/2005?' },
-            { 'id': 'p7', 'pt': 'Os equipamentos de trabalho colocados pela primeira vez à disposição dos trabalhadores da empresa ou do estabelecimento cumprem os requisitos de segurança e de saúde previstos na legislação específica relativa à concepção, ao fabrico e à comercialização?', 'es': '¿Los equipos de trabajo puestos por primera vez a disposición de los trabajadores de la empresa o establecimiento cumplen con los requisitos de seguridad y salud previstos en la legislación específica relativa al diseño, fabricación y comercialización?', 'en': 'Does the work equipment made available to workers in the company or establishment for the first time comply with the safety and health requirements provided for in the specific legislation on design, manufacturing, and marketing?' },
+            { 'id': 'p7', 'pt': 'Os equipamentos de trabalho colocados pela primeira vez à disposição dos trabalhadores da empresa ou do estabelecimento cumprem os requisitos de segurança e de saúde previstos na legislação específica relativa à concepção, ao fabrico e à comercialização?', 'es': '¿Los equipos de trabajo puestos por primeira vez a disposición de los trabajadores de la empresa o establecimiento cumplen con los requisitos de seguridad y salud previstos en la legislación específica relativa al diseño, fabricación y comercialización?', 'en': 'Does the work equipment made available to workers in the company or establishment for the first time comply with the safety and health requirements provided for in the specific legislation on design, manufacturing, and marketing?' },
             { 'id': 'p8', 'pt': 'O equipamento de trabalho deveria ter afixada a marcação CE?', 'es': '¿El equipo de trabajo debería llevar el marcado CE?', 'en': 'Should the work equipment have the CE marking affixed?' },
             { 'id': 'p9', 'pt': 'Se sim, o empregador possui a declaração CE?', 'es': 'Si es así, ¿el empleador posee la declaración CE?', 'en': 'If so, does the employer possess the EC declaration?' },
             { 'id': 'p10', 'pt': 'Os trabalhadores utilizam o equipamento de trabalho em conformidade com o Decreto-Lei 50/2005?', 'es': '¿Los trabajadores utilizan el equipo de trabajo de conformidad con el Decreto-Ley 50/2005?', 'en': 'Do workers use the work equipment in accordance with Decree-Law 50/2005?' }
@@ -129,29 +179,29 @@ const translations = {
         // Artigo 11º
         { 'article': { 'pt': 'Artigo 11º - Sistemas de comando', 'es': 'Artículo 11º - Sistemas de mando', 'en': 'Article 11 - Control systems' }, 'questions': [
             { 'id': 'p26', 'pt': 'Os sistemas de controlo dos equipamentos de trabalho que têm impacto na segurança são claramente visíveis, identificáveis e devidamente assinalados?', 'es': '¿Los sistemas de control de los equipos de trabajo que tienen un impacto en la seguridad son claramente visibles, identificables y debidamente señalizados?', 'en': 'Are the control systems of work equipment that impact safety clearly visible, identifiable, and properly marked?' },
-            { 'id': 'p27', 'pt': 'Os sistemas de controlo estão situados fora das zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'es': '¿Los sistemas de control están situados fuera de las zonas perigosas y de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'en': 'Are the control systems located outside the dangerous zones and in a way that their operation, particularly by unintentional manipulation, cannot cause additional risks?' },
+            { 'id': 'p27', 'pt': 'Os sistemas de controlo estão situados fora das zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'es': '¿Los sistemas de control están situados fuera de las zonas perigosas e de forma a que o seu funcionamento, nomeadamente por manipulação não intencional, não possa provocar riscos adicionais?', 'en': 'Are the control systems located outside the dangerous zones and in a way that their operation, particularly by unintentional manipulation, cannot cause additional risks?' },
             { 'id': 'p28', 'pt': 'O operador pode certificar-se, a partir do posto de comando principal, de que não há pessoas nas zonas perigosas ou, se tal não for possível, o arranque é automaticamente precedido de um sistema de alerta fiável, em especial um sinal sonoro ou visual.', 'es': 'El operador puede asegurarse, desde el puesto de mando principal, de que no hay personas en las zonas peligrosas o, si no es posible, el arranque está precedido automáticamente por un sistema de alerta fiable, en especial una señal sonora o visual.', 'en': 'The operator can ensure, from the main control station, that there are no people in the dangerous zones or, if not possible, the start-up is automatically preceded by a reliable alert system, especially an audible or visual signal.' },
-            { 'id': 'p29', 'pt': 'Após o aviso previsto no número anterior, o trabalhador exposto dispõe do tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?', 'es': 'Después del aviso previsto en el número anterior, ¿el trabajador expuesto dispone del tiempo y, si es necesario, de los medios indispensables para alejarse inmediatamente de la zona peligrosa?', 'en': 'Following the warning provided in the previous paragraph, does the exposed worker have the time and, if necessary, the indispensable means to immediately move away from the dangerous zone?' },
-            { 'id': 'p30', 'pt': 'Os sistemas de controlo são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?', 'es': '¿Los sistemas de control son seguros y elegidos teniendo en conta los fallos previsibles, las perturbaciones y las limitaciones de la utilización para que foram concebidos?', 'en': 'Are the control systems safe and chosen taking into account foreseeable failures, disturbances, and limitations of the use for which they were designed?' }
+            { 'id': 'p29', 'pt': 'Após o aviso previsto no número anterior, o trabalhador exposto dispõe do tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?', 'es': 'Después del aviso previsto en el número anterior, ¿el trabajador expuesto dispõe del tempo e, se necessário, dos meios indispensáveis para se afastar imediatamente da zona perigosa?', 'en': 'Following the warning provided in the previous paragraph, does the exposed worker have the time and, if necessary, the indispensable means to immediately move away from the dangerous zone?' },
+            { 'id': 'p30', 'pt': 'Os sistemas de controlo são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?', 'es': '¿Los sistemas de control são seguros e escolhidos tendo em conta as falhas previsíveis, as perturbações e as limitações da utilização para que foram concebidos?', 'en': 'Are the control systems safe and chosen taking into account foreseeable failures, disturbances, and limitations of the use for which they were designed?' }
         ]},
         // Artigo 12º
         { 'article': { 'pt': 'Artigo 12º - Arranque do equipamento de trabalho', 'es': 'Artículo 12º - Puesta en marcha del equipo de trabajo', 'en': 'Article 12 - Start-up of work equipment' }, 'questions': [
-            { 'id': 'p31', 'pt': 'O equipamento de trabalho está equipado com um sistema de comando de modo a que seja necessária uma acção voluntária sobre um comando para efeitos de:', 'es': '¿El equipo de trabajo está equipado con un sistema de mando de modo a que seja necessária uma acção voluntária sobre um comando para efeitos de:', 'en': 'Is the work equipment fitted with a control system so that a voluntary action on a control is necessary for the purposes of:' },
+            { 'id': 'p31', 'pt': 'O equipamento de trabalho está equipado com um sistema de comando de modo a que seja necessária uma acção voluntária sobre um comando para efeitos de:', 'es': '¿El equipo de trabajo está equipado com um sistema de comando de modo a que seja necessária uma acção voluntária sobre um comando para efeitos de:', 'en': 'Is the work equipment fitted with a control system so that a voluntary action on a control is necessary for the purposes of:' },
             { 'id': 'p32', 'pt': 'a) Colocar o equipamento de trabalho em funcionamento?', 'es': 'a) Poner el equipo de trabajo en funcionamiento?', 'en': 'a) Starting the work equipment?' },
-            { 'id': 'p33', 'pt': 'b) O equipamento arrancar após uma paragem, qualquer que seja a origem desta;', 'es': 'b) Arrancar el equipo después de una parada, cualquiera que sea el origen de esta;', 'en': 'b) The equipment starting after a stop, regardless of its origin;' },
-            { 'id': 'p34', 'pt': 'c) O equipamento sofrerá uma modificação importante das condições de funcionamento, nomeadamente velocidade ou pressão.', 'es': 'c) El equipo sufrirá una modificación importante de las condiciones de funcionamento, nomeadamente velocidade ou pressão.', 'en': 'c) The equipment undergoing a significant modification of the operating conditions, namely speed or pressure.' }
+            { 'id': 'p33', 'pt': 'b) O equipamento arrancar após uma paragem, qualquer que seja a origem desta;', 'es': 'b) Arrancar el equipo después de una parada, cualquiera que seja a origem desta;', 'en': 'b) The equipment starting after a stop, regardless of its origin;' },
+            { 'id': 'p34', 'pt': 'c) O equipamento sofrerá uma modificação importante das condições de funcionamento, nomeadamente velocidade ou pressão.', 'es': 'c) El equipo sufrirá uma modificação importante das condições de funcionamento, nomeadamente velocidade ou pressão.', 'en': 'c) The equipment undergoing a significant modification of the operating conditions, namely speed or pressure.' }
         ]},
         // Artigo 13º
         { 'article': { 'pt': 'Artigo 13º - Paragem do equipamento de trabalho', 'es': 'Artículo 13º - Parada del equipo de trabajo', 'en': 'Article 13 - Stopping of work equipment' }, 'questions': [
-            { 'id': 'p35', 'pt': 'a) O equipamento de trabalho possui um sistema de comando que permita a sua paragem total em condições de segurança?', 'es': 'a) ¿El equipo de trabajo possui um sistema de comando que permita a sua paragem total em condições de segurança?', 'en': 'a) Does the work equipment have a control system that allows its total stop under safe conditions?' },
-            { 'id': 'p36', 'pt': 'b) Em função dos riscos que o equipamento de trabalho apresenta e do tempo normal de paragem, a instalação de um dispositivo de paragem de emergência proporciona mais segurança e está instalado?', 'es': 'b) En função dos riscos que o equipamento de trabalho apresenta e do tempo normal de paragem, ¿a instalação de um dispositivo de paragem de emergência proporciona mais segurança e está instalado?', 'en': 'b) Depending on the risks presented by the work equipment and the normal stopping time, does the installation of an emergency stop device provide more safety and is it installed?' },
+            { 'id': 'p35', 'pt': 'a) O equipamento de trabalho possui um sistema de comando que permita a sua paragem total em condições de segurança?', 'es': 'a) ¿O equipamento de trabalho possui um sistema de comando que permita a sua paragem total em condições de segurança?', 'en': 'a) Does the work equipment have a control system that allows its total stop under safe conditions?' },
+            { 'id': 'p36', 'pt': 'b) Em função dos riscos que o equipamento de trabalho apresenta e do tempo normal de paragem, a instalação de um dispositivo de paragem de emergência proporciona mais segurança e está instalado?', 'es': 'b) Em função dos riscos que o equipamento de trabalho apresenta e do tempo normal de paragem, ¿a instalação de um dispositivo de paragem de emergência proporciona mais segurança e está instalado?', 'en': 'b) Depending on the risks presented by the work equipment and the normal stopping time, does the installation of an emergency stop device provide more safety and is it installed?' },
             { 'id': 'p37', 'pt': 'a) Cada posto de trabalho dispõe de um sistema de comando que permite a paragem total ou parcial do equipamento em caso de situação de perigo?', 'es': 'a) ¿Cada posto de trabalho dispõe de um sistema de comando que permite a paragem total ou parcial do equipamento em caso de situação de perigo?', 'en': 'a) Does each work station have a control system that allows the total or partial stop of the equipment in case of a dangerous situation?' },
             { 'id': 'p38', 'pt': 'b) A ordem de paragem do equipamento de trabalho tem prioridade sobre as ordens de arranque?', 'es': 'b) ¿A ordem de paragem do equipamento de trabalho tem prioridade sobre as ordens de arranque?', 'en': 'b) Does the stopping order of the work equipment take priority over the starting orders?' },
             { 'id': 'p39', 'pt': 'O fornecimento de energia aos actuadores ou aos seus elementos periféricos é interrompido depois de o equipamento de trabalho ter parado?', 'es': 'O fornecimento de energia aos actuadores ou aos seus elementos periféricos é interrompido depois de o equipamento de trabalho ter parado?', 'en': 'Is the energy supply to the actuators or their peripheral elements interrupted after the work equipment has stopped?' }
         ]},
         // Artigo 14º
         { 'article': { 'pt': 'Artigo 14º - Estabilidade de ruptura', 'es': 'Artículo 14º - Estabilidad de ruptura', 'en': 'Article 14 - Stability against rupture' }, 'questions': [
-            { 'id': 'p40', 'pt': 'O equipamento de trabalho e os seus elementos estão estabilizados por fixação ou por outros meios, se necessário para a segurança ou a saúde dos trabalhadores?', 'es': '¿O equipamento de trabalho e os seus elementos estão estabilizados por fixação ou por outros meios, se necessário para a segurança ou a saúde dos trabalhadores?', 'en': 'Are the work equipment and its elements stabilized by fastening or by other means, if necessary for the safety or health of workers?' },
+            { 'id': 'p40', 'pt': 'O equipamento de trabalho e os seus elementos estão estabilizados por fixação ou por outros meios, se necessário para a segurança ou a saúde dos trabalhadores?', 'es': 'O equipamento de trabalho e os seus elementos estão estabilizados por fixação ou por outros meios, se necessário para a segurança ou a saúde dos trabalhadores?', 'en': 'Are the work equipment and its elements stabilized by fastening or by other means, if necessary for the safety or health of workers?' },
             { 'id': 'p41', 'pt': 'Se existirem riscos de estilhaçamento ou de rotura de elementos do equipamento susceptíveis de pôr em perigo a segurança ou a saúde dos trabalhadores foram tomadas as medidas de protecção adequado?', 'es': 'Se existirem riscos de estilhaçamento ou de rotura de elementos do equipamento susceptíveis de pôr em perigo a segurança ou a saúde dos trabalhadores foram tomadas as medidas de protecção adequado?', 'en': 'If there are risks of splintering or rupture of equipment elements likely to endanger the safety or health of workers, were adequate protection measures taken?' }
         ]},
         // Artigo 15º
@@ -205,7 +255,7 @@ const translations = {
     ]
 };
 
-// Função para gerar o HTML da tabela (MANTIDA A MESMA)
+// Função para gerar o HTML da tabela
 function generateTable(lang) {
     const tbody = document.querySelector('tbody');
     tbody.innerHTML = ''; // Limpa o conteúdo existente
@@ -233,21 +283,23 @@ function generateTable(lang) {
     });
 }
 
-// Função para alterar o idioma (MODIFICADA para remover a tradução do label, que não existe mais)
+// Função para alterar o idioma
 function changeLanguage(lang) {
     // 1. Traduzir o título da página e o título principal
     document.getElementById('pageTitle').textContent = translations.pageTitle[lang];
     document.getElementById('mainTitle').textContent = translations.mainTitle[lang];
 
-    // 2. Traduzir os cabeçalhos da tabela
+    // 2. Traduzir os campos de Cliente e Projeto
+    document.getElementById('clientLabel').textContent = translations.clientLabel[lang];
+    document.getElementById('projectLabel').textContent = translations.projectLabel[lang];
+
+    // 3. Traduzir os cabeçalhos da tabela
     const headers = translations.tableHeaders[lang];
     const headerRow = document.getElementById('tableHeaders');
     headerRow.innerHTML = `<th>${headers[0]}</th><th>${headers[1]}</th><th>${headers[2]}</th><th>${headers[3]}</th><th>${headers[4]}</th>`;
 
-    // 3. Gerar o novo corpo da tabela com as traduções
+    // 4. Gerar o novo corpo da tabela com as traduções
     generateTable(lang);
-
-    // 4. (REMOVIDO: a tradução do label)
 }
 
 // Inicializar a tabela no idioma padrão (Português) ao carregar a página
