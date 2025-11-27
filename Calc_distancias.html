@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8" />
+<title>Cálculo de Distâncias de Segurança (ISO 13857)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #2D2D2D; color: #F4F3F2; }
+    .topo { display:flex; align-items:center; justify-content:flex-start; margin-bottom:25px; position:relative; }
+    .logo { height:50px; margin-right:15px; }
+    h2#titulo { margin:0; font-size:1.4em; color:#F4F3F2; }
+    .calc-box { border:1px solid #555; padding:20px; margin-bottom:20px; border-radius:8px; background-color:#3A3A3A; max-width: 600px; }
+    label { margin-bottom:6px; display:block; font-weight: bold; }
+    /* Estilo para as caixas de seleção */
+    select { width:100%; background-color:#4A4A4A; color:#F4F3F2; border:1px solid #777; padding:10px; border-radius:4px; box-sizing:border-box; margin-bottom: 15px; font-size: 1em; }
+    #resultado { font-size: 1.2em; font-weight: bold; color: #00A3CC; /* Uma cor de destaque */ margin-top: 20px; padding: 10px; background-color: #202020; border-radius: 4px; text-align: center; }
+    .info { font-size: 0.9em; margin-top: 10px; color: #A0A0A0; }
+    
+    /* Estilos para o grupo de botões */
+    #button-group {
+        display: flex; 
+        justify-content: flex-start; /* ALINHAMENTO À ESQUERDA */
+        margin-top: 30px;
+        margin-bottom: 30px;
+        /* Removido o gap para não ter espaço desnecessário */
+    }
+    
+    #backButton {
+        padding: 15px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        background-color: #FF0000;
+        color: white; 
+        text-decoration: none; 
+        text-align: center; 
+        display: inline-block; 
+    }
+    #backButton:hover {
+        background-color: #CC0000;
+    }
+</style>
+</head>
+<body>
+
+<div class="topo">
+    <img src="https://www.euchner.pt/wp-content/themes/euchner/img/logo.png" class="logo" alt="logo" />
+    <h2 id="titulo">Cálculo de Distância de Segurança (ISO 13857)</h2>
+</div>
+
+<div class="calc-box">
+    
+    <img src="https://www.safety-guards.com/wp-content/uploads/2022/10/distanza-di-sicurezza-safety-guards-Milper.jpg" alt="Diagrama de Distâncias de Segurança com parâmetros a, b e c" style="width: 100%; height: auto; margin-bottom: 20px; border-radius: 4px;" />
+
+    <label for="a">Parâmetro a (Altura do Ponto de Perigo, a) [mm]:</label>
+    <select id="a" onchange="calcularDistancia()">
+        <option value="0">0 mm</option>
+        <option value="200">200 mm</option>
+        <option value="400">400 mm</option>
+        <option value="600">600 mm</option>
+        <option value="800" selected>800 mm</option>
+        <option value="1000">1000 mm</option>
+        <option value="1200">1200 mm</option>
+        <option value="1400">1400 mm</option>
+        <option value="1600">1600 mm</option>
+        <option value="1800">1800 mm</option>
+        <option value="2000">2000 mm</option>
+        <option value="2200">2200 mm</option>
+        <option value="2400">2400 mm</option>
+        <option value="2600">2600 mm</option>
+        <option value="2700">2700 mm</option>
+    </select>
+    <div class="info">Selecione a altura do perigo (Valores de linha da Tabela ISO 13857).</div>
+
+    <label for="b">Parâmetro b (Altura da Estrutura de Proteção, b) [mm]:</label>
+    <select id="b" onchange="calcularDistancia()">
+        <option value="1000">1000 mm</option>
+        <option value="1200">1200 mm</option>
+        <option value="1400" selected>1400 mm</option>
+        <option value="1600">1600 mm</option>
+        <option value="1800">1800 mm</option>
+        <option value="2000">2000 mm</option>
+        <option value="2200">2200 mm</option>
+        <option value="2400">2400 mm</option>
+        <option value="2500">2500 mm</option>
+        <option value="2700">2700 mm</option>
+    </select>
+    <div class="info">Selecione a altura da estrutura de proteção (Valores de coluna da Tabela ISO 13857).</div>
+
+    <div id="resultado">
+        O Parâmetro c (Distância de Segurança Horizontal, c) é: **—** mm
+    </div>
+</div>
+
+<div id="button-group">
+    <a href="menu.html" id="backButton">Back</a>
+</div>
+
+<script>
+// Tabela de distâncias (c) em milímetros, conforme a imagem fornecida (ISO 13857, Tabela 2)
+const tabelaDistancias = {
+    // b:   1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2500, 2700
+    2700: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    2600: [900, 800, 700, 600, 600, 500, 400, 300, 100, 0],
+    2400: [1100, 1000, 900, 800, 700, 600, 400, 300, 100, 0],
+    2200: [1300, 1200, 1000, 900, 800, 600, 400, 300, 0, 0],
+    2000: [1400, 1300, 1100, 1000, 900, 800, 600, 400, 0, 0],
+    1800: [1500, 1400, 1100, 900, 800, 500, 0, 0, 0, 0],
+    1600: [1500, 1400, 1100, 900, 800, 500, 0, 0, 0, 0],
+    1400: [1500, 1400, 1100, 900, 800, 0, 0, 0, 0, 0],
+    1200: [1500, 1400, 1100, 900, 700, 0, 0, 0, 0, 0],
+    1000: [1500, 1400, 1100, 900, 0, 0, 0, 0, 0, 0],
+    800: [1500, 1300, 900, 600, 0, 0, 0, 0, 0, 0],
+    600: [1400, 1300, 800, 400, 0, 0, 0, 0, 0, 0],
+    400: [1200, 1000, 400, 0, 0, 0, 0, 0, 0, 0],
+    200: [1200, 900, 0, 0, 0, 0, 0, 0, 0, 0],
+    0: [1100, 500, 0, 0, 0, 0, 0, 0, 0, 0]
+};
+
+// Alturas (Parâmetro b) disponíveis na tabela (colunas)
+const hpsHeaders = [1000, 1200, 1400, 1600, 1800, 2000, 2200, 2400, 2500, 2700];
+
+function calcularDistancia() {
+    const hhInput = document.getElementById('a'); // Corresponde ao Parâmetro a
+    const hpsInput = document.getElementById('b'); // Corresponde ao Parâmetro b
+    const resultadoDiv = document.getElementById('resultado');
+
+    const hh = parseInt(hhInput.value); 
+    const hps = parseInt(hpsInput.value);
+
+    // 1. Encontrar a linha (a)
+    const hhLinha = hh; 
+
+    // 2. Encontrar a coluna (b)
+    const hpsIndex = hpsHeaders.findIndex(header => header === hps);
+
+    // Validação da coluna (B)
+    if (hpsIndex === -1) {
+        resultadoDiv.innerHTML = `O Parâmetro c (Distância de Segurança Horizontal, c) é: **Parâmetro b (Altura da Proteção) Inválido**`;
+        return;
+    }
+
+    const distancias = tabelaDistancias[hhLinha];
+    const sh = distancias[hpsIndex]; // O valor de sh é o Parâmetro c
+
+    // Verifica se a combinação de linha e coluna existe na tabela
+    if (sh === undefined) {
+        resultadoDiv.innerHTML = `O Parâmetro c (Distância de Segurança Horizontal, c) é: **Não Aplicável / Valores Incompatíveis**`;
+    } else {
+        resultadoDiv.innerHTML = `O Parâmetro c (Distância de Segurança Horizontal, c) é: ${sh} mm`;
+    }
+}
+
+// Inicializa o cálculo ao carregar a página
+document.addEventListener('DOMContentLoaded', calcularDistancia);
+</script>
+
+</body>
+</html>
