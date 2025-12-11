@@ -145,7 +145,6 @@
 </head>
 <body>
 
-<!-- TOP BAR -->
 <div class="topo">
     <img src="https://www.euchner.pt/wp-content/themes/euchner/img/logo.png" class="logo" alt="logo">
 
@@ -160,7 +159,6 @@
     </div>
 </div>
 
-<!-- STUDY INFO -->
 <div class="study-box">
     <h3 id="studyTitle">Relatório Estudo de Segurnça</h3>
 
@@ -198,16 +196,11 @@ const textos = {
         ce: "Marcação CE da Máquina:",
         geral: "Foto Geral da Máquina:",
         descricao: "Descrição:",
-        pl: "Determinar Performance Level (PLr)",
-        severidade: "Severidade da lesão (S):",
-        frequencia: "Frequência / exposição ao perigo (F):",
-        possibilidade: "Possibilidade de evitar (P):",
         fotos: "Fotos",
         foto: "Foto",
-        addFuncao: "Adicionar Função",
+        addFuncao: "Adicionar Ficha de Perigo",
         gerarPDF: "Gerar PDF",
-        funcao: "Função",
-        plCalculado: "PL calculado:"
+        funcao: "Ficha de Perigo"
     },
     es: {
         titulo: "Informe Estudio de Seguridad",
@@ -218,16 +211,11 @@ const textos = {
         ce: "Marcado CE de la Máquina:",
         geral: "Foto General de la Máquina:",
         descricao: "Descripción:",
-        pl: "Determinar Nivel de Rendimiento (PLr)",
-        severidade: "Gravedad de la lesión (S):",
-        frequencia: "Frecuencia / exposición al peligro (F):",
-        possibilidade: "Posibilidad de evitar (P):",
         fotos: "Fotos",
         foto: "Foto",
-        addFuncao: "Añadir Función",
+        addFuncao: "Añadir Ficha de Peligro",
         gerarPDF: "Generar PDF",
-        funcao: "Función",
-        plCalculado: "PL calculado:"
+        funcao: "Ficha de Peligro"
     },
     en: {
         titulo: "Safety Study Report",
@@ -238,16 +226,11 @@ const textos = {
         ce: "Machine CE Marking:",
         geral: "General Machine Photo:",
         descricao: "Description:",
-        pl: "Determine Performance Level (PLr)",
-        severidade: "Severity of injury (S):",
-        frequencia: "Frequency / exposure to hazard (F):",
-        possibilidade: "Possibility of avoiding (P):",
         fotos: "Photos",
         foto: "Photo",
-        addFuncao: "Add Function",
+        addFuncao: "Add Hazard Sheet",
         gerarPDF: "Generate PDF",
-        funcao: "Function",
-        plCalculado: "Calculated PL:"
+        funcao: "Hazard Sheet"
     }
 };
 
@@ -273,10 +256,6 @@ function atualizarIdioma() {
     document.querySelectorAll(".item").forEach((item, idx) => {
         item.querySelector(".hFuncao").innerText = `${t.funcao} ${idx+1}`;
         item.querySelector(".lblDescricao").innerText = t.descricao;
-        item.querySelector(".lblS").innerText = t.severidade;
-        item.querySelector(".lblF").innerText = t.frequencia;
-        item.querySelector(".lblP").innerText = t.possibilidade;
-        item.querySelector(".plCalc").innerText = t.plCalculado;
         item.querySelector(".lblFotos").innerText = t.fotos;
         item.querySelectorAll(".lblFoto").forEach((f,i)=> f.innerText = `${t.foto} ${i+1}:`);
     });
@@ -297,26 +276,6 @@ function addItem() {
         <label class="lblDescricao">${t.descricao}</label>
         <textarea class="descricao" rows="3"></textarea>
 
-        <label class="lblS">Severidade (S):</label>
-        <select class="S" onchange="atualizarPL(this)">
-            <option value="S1">S1 - Slight Injury</option>
-            <option value="S2">S2 - Serios Injury Including Death</option>
-        </select>
-
-        <label class="lblF">Frequência (F):</label>
-        <select class="F" onchange="atualizarPL(this)">
-            <option value="F1">F1 - Seldon to Quite Often</option>
-            <option value="F2">F2 - Frequent to continuos</option>
-        </select>
-
-        <label class="lblP">Possibilidade (P):</label>
-        <select class="P" onchange="atualizarPL(this)">
-            <option value="P1">P1 - Possible</option>
-            <option value="P2">P2 - Neraly Impossible</option>
-        </select>
-
-        <div class="plCalc">${t.plCalculado} <span class="plDisplay">—</span></div>
-
         <label class="lblFotos">${t.fotos}</label>
         <label class="lblFoto">${t.foto} 1:</label>
         <input type="file" accept="image/*" capture="camera" class="foto1">
@@ -329,26 +288,6 @@ function addItem() {
     `;
 
     document.getElementById("container").appendChild(div);
-    atualizarPL(div);
-}
-
-/* ---- CALCULAR PL ---- */
-function atualizarPL(el) {
-    const item = el.closest(".item");
-    const val = calcularPL(item);
-    item.querySelector(".plDisplay").innerText = val || '—';
-}
-
-function calcularPL(item) {
-    const S = item.querySelector(".S").value;
-    const F = item.querySelector(".F").value;
-    const P = item.querySelector(".P").value;
-    const key = S+F+P;
-    const map = {
-        'S1F1P1':'a','S1F1P2':'b','S1F2P1':'b','S1F2P2':'c',
-        'S2F1P1':'c','S2F1P2':'d','S2F2P1':'d','S2F2P2':'e'
-    };
-    return map[key] || '—';
 }
 
 /* ---- util: File -> dataURL ---- */
@@ -451,8 +390,7 @@ async function gerarPDF(){
         doc.text(`${t.funcao} ${i+1}`, 10, y); y += 7;
         doc.setFontSize(11);
         const desc = item.querySelector('.descricao').value || '';
-        doc.text(`${t.descricao} ${desc}`, 10, y); y += 6;
-        doc.text(`${t.plCalculado} ${calcularPL(item)}`, 10, y); y += 8;
+        doc.text(`${t.descricao} ${desc}`, 10, y); y += 8; // Ajuste no espaçamento após remover PL
 
         const fotos = [
             item.querySelector('.foto1')?.files?.[0],
