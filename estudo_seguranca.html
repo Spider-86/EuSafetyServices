@@ -284,21 +284,118 @@ function addItem() {
 
         <label class="lblFoto">${t.foto} 2:</label>
         <input type="file" accept="image/*" capture="camera" class="foto2">
-
         `;
 
     document.getElementById("container").appendChild(div);
 }
 
-/* ---- util: File -> dataURL ---- */
+// ----------------------------------------------------------------------
+// NOVAS FUNÇÕES PARA CORRIGIR A ORIENTAÇÃO DA IMAGEM (EXIF)
+// ----------------------------------------------------------------------
+
+// Função para ler o valor de orientação EXIF (Simplificado)
+function getOrientation(file, callback) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const view = new DataView(e.target.result);
+        if (view.getUint16(0, false) != 0xFFD8) return callback(-2); // Não é JPEG
+
+        const length = view.byteLength;
+        let offset = 2;
+
+        while (offset < length) {
+            const marker = view.getUint16(offset, false);
+            offset += 2;
+
+            if (marker == 0xFFE1) {
+                // APP1 (EXIF)
+                if (view.getUint32(offset += 2, false) != 0x45786966) return callback(-1); // Não é EXIF
+
+                const tiffOffset = offset + 6;
+                const littleEndian = view.getUint16(tiffOffset) == 0x4949;
+                offset = view.getUint32(tiffOffset + 4, littleEndian) + tiffOffset;
+                const entries = view.getUint16(offset, littleEndian);
+                offset += 2;
+
+                for (let i = 0; i < entries; i++) {
+                    if (view.getUint16(offset + (i * 12), littleEndian) == 0x0112) {
+                        return callback(view.getUint16(offset + (i * 12) + 8, littleEndian));
+                    }
+                }
+            } else if ((marker & 0xFF00) != 0xFF00) {
+                break;
+            } else {
+                offset += view.getUint16(offset, false);
+            }
+        }
+        return callback(-1); // Não encontrado
+    };
+    reader.readAsArrayBuffer(file.slice(0, 65536)); // Ler apenas o início do ficheiro
+}
+
+// Função para corrigir a orientação no Canvas
+function resetOrientation(srcBase64, orientation, callback) {
+    const img = new Image();
+    img.onload = function() {
+        const width = img.width;
+        const height = img.height;
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Configurar o Canvas para a nova orientação
+        if (orientation > 4) {
+            canvas.width = height;
+            canvas.height = width;
+        } else {
+            canvas.width = width;
+            canvas.height = height;
+        }
+
+        // Aplicar a transformação de rotação/espelhamento
+        switch (orientation) {
+            case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+            case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+            case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+            case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+            case 6: ctx.transform(0, 1, -1, 0, height, 0); break;
+            case 7: ctx.transform(0, -1, -1, 0, height, width); break;
+            case 8: ctx.transform(0, -1, 1, 0, 0, width); break;
+            default: break;
+        }
+
+        ctx.drawImage(img, 0, 0);
+
+        // Retornar o Data URL corrigido (JPEG de qualidade 90%)
+        callback(canvas.toDataURL('image/jpeg', 0.9));
+    };
+    img.src = srcBase64;
+}
+
+/* ---- util: File -> dataURL (MODIFICADA) ---- */
 function fileToDataURL(file){
     return new Promise((res, rej)=>{
-        const r = new FileReader();
-        r.onload = ()=> res(r.result);
-        r.onerror = e=> rej(e);
-        r.readAsDataURL(file);
+        const reader = new FileReader();
+        reader.onload = async function(e) {
+            const dataURL = e.target.result;
+
+            // 1. Obter a orientação EXIF
+            getOrientation(file, (orientation) => {
+                if (orientation > 1) {
+                    // 2. Corrigir a orientação e obter o Data URL corrigido
+                    resetOrientation(dataURL, orientation, (correctedDataURL) => {
+                        res(correctedDataURL);
+                    });
+                } else {
+                    // Sem correção necessária
+                    res(dataURL);
+                }
+            });
+        };
+        reader.onerror = e=> rej(e);
+        reader.readAsDataURL(file);
     });
 }
+// Fim das modificações
 
 /* ---- adicionar imagem ao PDF dimensionada ---- */
 async function addImageFullSize(doc, dataUrl, x, y, maxW = 180, maxH = 120){
@@ -312,6 +409,7 @@ async function addImageFullSize(doc, dataUrl, x, y, maxW = 180, maxH = 120){
                 const r = Math.min(maxW/w, maxH/h);
                 w *= r; h *= r;
             }
+            // Adicionar a imagem corrigida ao PDF
             doc.addImage(dataUrl, 'JPEG', x, y, w, h);
             resolve(h + 8);
         };
@@ -360,7 +458,7 @@ async function gerarPDF(){
     if(fotoCEFile){
         doc.setFontSize(11);
         doc.text(t.ce, 10, y); y+=6;
-        const dataUrl = await fileToDataURL(fotoCEFile);
+        const dataUrl = await fileToDataURL(fotoCEFile); // Usa a função corrigida
         const h = await addImageFullSize(doc, dataUrl, 10, y, 90, 80);
         y += h;
     }
@@ -370,7 +468,7 @@ async function gerarPDF(){
         if(y > 250){ doc.addPage(); y = 12; }
         doc.setFontSize(11);
         doc.text(t.geral, 10, y); y+=6;
-        const dataUrl = await fileToDataURL(fotoGeralFile);
+        const dataUrl = await fileToDataURL(fotoGeralFile); // Usa a função corrigida
         const h = await addImageFullSize(doc, dataUrl, 10, y, 180, 120);
         y += h;
     }
@@ -400,7 +498,7 @@ async function gerarPDF(){
 
         for(const f of fotos){
             if(y > 220){ doc.addPage(); y = 12; }
-            const dataUrl = await fileToDataURL(f);
+            const dataUrl = await fileToDataURL(f); // Usa a função corrigida
             const h = await addImageFullSize(doc, dataUrl, 10, y, 180, 120);
             y += h;
         }
