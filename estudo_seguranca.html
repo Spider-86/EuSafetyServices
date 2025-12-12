@@ -136,12 +136,6 @@
         display: block;
         margin-top: 10px;
     }
-    
-    /* Novo estilo para o botão HTML */
-    #btnHTML {
-        background-color: #007bff; /* Azul para HTML (Editável) */
-    }
-
 
     @media (max-width: 600px) {
         #cliente, #maquina { width: 100%; }
@@ -187,7 +181,8 @@
 
 <button id="btnAdd" onclick="addItem()">Adicionar Função</button>
 <button id="btnPDF" onclick="gerarPDF()">Gerar PDF</button>
-<button id="btnHTML" onclick="generateHtml()">Gerar HTML (Editável)</button> <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 /* ---- TEXTOS MULTILINGUE ---- */
 const textos = {
@@ -261,12 +256,14 @@ function atualizarIdioma() {
         item.querySelector(".hFuncao").innerText = `${t.funcao} ${idx+1}`;
         item.querySelector(".lblDescricao").innerText = t.descricao;
         item.querySelector(".lblFotos").innerText = t.fotos;
-        // O loop agora só encontra foto 1 e foto 2 e numera corretamente
-        item.querySelectorAll(".lblFoto").forEach((f,i)=> f.innerText = `${t.foto} ${i+1}:`);
+        // Assegurar que só as fotos 1 e 2 são atualizadas, removendo a referência à foto 3
+        const fotosLabels = item.querySelectorAll(".lblFoto");
+        if(fotosLabels.length >= 1) fotosLabels[0].innerText = `${t.foto} 1:`;
+        if(fotosLabels.length >= 2) fotosLabels[1].innerText = `${t.foto} 2:`;
     });
 }
 
-/* ---- ADICIONAR FUNÇÃO (AGORA SÓ COM 2 FOTOS) ---- */
+/* ---- ADICIONAR FUNÇÃO ---- */
 function addItem() {
     contador++;
     const lang = document.getElementById("langSelect").value;
@@ -287,7 +284,8 @@ function addItem() {
 
         <label class="lblFoto">${t.foto} 2:</label>
         <input type="file" accept="image/*" capture="camera" class="foto2">
-    `; // FOTO 3 REMOVIDA
+
+        `;
 
     document.getElementById("container").appendChild(div);
 }
@@ -321,7 +319,7 @@ async function addImageFullSize(doc, dataUrl, x, y, maxW = 180, maxH = 120){
     });
 }
 
-/* ---- GERAR PDF (robusto, AGORA SÓ COM 2 FOTOS POR FUNÇÃO) ---- */
+/* ---- GERAR PDF (robusto) ---- */
 async function gerarPDF(){
     if(!window.jspdf || !window.jspdf.jsPDF){
         alert('Biblioteca jsPDF não carregada.');
@@ -392,9 +390,9 @@ async function gerarPDF(){
         doc.text(`${t.funcao} ${i+1}`, 10, y); y += 7;
         doc.setFontSize(11);
         const desc = item.querySelector('.descricao').value || '';
-        doc.text(`${t.descricao} ${desc}`, 10, y); y += 8; // Ajuste no espaçamento
+        doc.text(`${t.descricao} ${desc}`, 10, y); y += 8; // Ajuste no espaçamento após remover PL
 
-        // APENAS FOTO 1 E FOTO 2
+        // Atualização para considerar apenas as fotos 1 e 2
         const fotos = [
             item.querySelector('.foto1')?.files?.[0],
             item.querySelector('.foto2')?.files?.[0]
@@ -413,129 +411,6 @@ async function gerarPDF(){
     }
 
     doc.save('Estudo_de_Seguranca.pdf');
-}
-
-
-/* ---- GERAÇÃO DE HTML (NOVO CÓDIGO EDITÁVEL) ---- */
-
-/** Gera o HTML formatado para ser aberto e editado no Word. */
-async function generateHtml() {
-    const langSelect = document.getElementById('langSelect');
-    const t = textos[langSelect.value];
-    
-    const cliente = document.getElementById('cliente').value || 'N/A';
-    const maquina = document.getElementById('maquina').value || 'N/A';
-    const geralText = document.getElementById('textoGeral').value || '';
-    const fotoGeralFile = document.getElementById('fotoGeral')?.files?.[0];
-    
-    // Início da Estrutura HTML
-    let htmlContent = `
-    <!DOCTYPE html>
-    <html lang="${langSelect.value}">
-    <head>
-        <meta charset="UTF-8">
-        <title>Documento Editável - ${t.titulo}</title>
-        <style>
-            /* Estes estilos afetam SÓ o ficheiro HTML GERADO (para abrir no Word/Docs). */
-            body { font-family: Arial, sans-serif; line-height: 1.6; margin: 40px; color: #333; }
-            h1 { border-bottom: 3px solid #0056b3; padding-bottom: 8px; color: #0056b3; }
-            h2 { color: #007bff; margin-top: 30px; border-bottom: 1px dashed #ccc; padding-bottom: 5px; }
-            h3 { color: #333; margin-top: 20px; }
-            .info-box { margin-bottom: 15px; background-color: #f8f9fa; padding: 10px; border-left: 5px solid #007bff; }
-            .info-box p { margin: 5px 0; }
-            .section-content { margin-bottom: 30px; }
-            .image-container { margin: 20px 0; text-align: center; page-break-inside: avoid; }
-            img { max-width: 80%; height: auto; display: block; margin: 0 auto; border: 1px solid #ddd; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
-            .item-section { page-break-inside: avoid; margin-bottom: 40px; border: 1px solid #ccc; padding: 15px; border-radius: 5px;}
-            .fotos-row { display: flex; justify-content: space-around; gap: 10px; }
-            .fotos-row .image-container { flex: 1; margin: 10px 0; }
-            .fotos-row img { max-width: 100%; }
-        </style>
-    </head>
-    <body>
-    
-    <h1>${t.titulo}</h1>
-    
-    <div class="info-box">
-        <p><strong>${t.cliente}</strong> ${cliente}</p>
-        <p><strong>${t.maquina}</strong> ${maquina}</p>
-        <p><strong>${t.ano}</strong> ${document.getElementById('ano').value || 'N/A'}</p>
-    </div>
-    
-    <h2>${t.geral}</h2>
-    <div class="section-content">
-        <p>${geralText.replace(/\n/g, '<br>')}</p>
-    `;
-    
-    // Adicionar a Imagem Geral
-    if (fotoGeralFile) {
-        const dataUrl = await fileToDataURL(fotoGeralFile); 
-        htmlContent += `<div class="image-container"><img src="${dataUrl}" alt="Foto Geral"></div>`;
-    }
-    htmlContent += `</div>`;
-
-
-    // 5. Loop Funções (Items)
-    const items = document.querySelectorAll('.item');
-    
-    if (items.length > 0) {
-        htmlContent += `<h2>Fichas de Análise por Função</h2>`; // Usar um título genérico
-    }
-
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i];
-        const desc = item.querySelector('.descricao').value || 'N/A';
-        
-        htmlContent += `
-        <div class="item-section">
-            <h3>${t.funcao} ${i + 1}</h3>
-            <p><strong>${t.descricao}</strong> ${desc.replace(/\n/g, '<br>')}</p>
-            
-            <div class="fotos-row">
-        `;
-
-        // APENAS FOTO 1 E FOTO 2
-        const fotos = [
-            item.querySelector('.foto1')?.files?.[0],
-            item.querySelector('.foto2')?.files?.[0]
-        ].filter(Boolean);
-
-        // Adicionar as fotos de cada item
-        for (const f of fotos) {
-            const dataUrlItem = await fileToDataURL(f);
-            htmlContent += `<div class="image-container"><img src="${dataUrlItem}" alt="${t.funcao} ${i+1} Foto"></div>`;
-        }
-        
-        // Adicionar placeholders vazios para manter o layout de 2 colunas mesmo com 1 foto
-        if (fotos.length < 2) {
-             htmlContent += `<div class="image-container"></div>`;
-        }
-        
-        htmlContent += `
-            </div> 
-        </div>
-        `;
-    }
-
-    htmlContent += `
-    </body>
-    </html>
-    `;
-
-    // 6. Iniciar o download
-    downloadHtmlFile(htmlContent, 'Estudo_de_Seguranca_Editavel.html');
-}
-
-/** Utilitário para acionar o download do arquivo HTML. */
-function downloadHtmlFile(content, fileName) {
-    const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(a.href); 
 }
 
 /* ---- inicializar idioma padrão (Espanhol) ---- */
