@@ -16,56 +16,75 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px; /* Padding ajustado para melhor responsividade */
+            padding: 20px;
         }
         .logo {
-            width: 100%; /* Ajusta a largura da imagem conforme o tamanho da tela */
-            max-width: 170px; /* Largura máxima da logo */
+            width: 100%;
+            max-width: 170px;
             height: auto;
-
         }
         h1 {
-            font-size: 24px; /* Tamanho do título ajustado para telas maiores */
-            color: #fff; /* Título branco */
+            font-size: 24px;
+            color: #fff;
             margin-top: 15px;
         }
+        
+        /* NOVO: Flexbox para alinhar e uniformizar o tamanho dos botões */
         .button-container {
-            margin-top: 20px; /* Ajustado para dispositivos móveis */
+            margin-top: 30px;
+            display: flex; /* Habilita o Flexbox */
+            justify-content: center; /* Centra os botões no container */
+            flex-wrap: wrap; /* Permite que os botões quebrem a linha em telas pequenas */
+            gap: 15px; /* Espaço entre os botões */
+            padding: 0 10px; /* Pequeno padding para não colar nas bordas do ecrã */
         }
+        
         .btn {
-            background-color: #FF0000; /* Cor de fundo do botão */
-            color: white; /* Texto do botão */
-            padding: 15px 30px;
-            margin: 10px;
+            background-color: #FF0000;
+            color: white;
+            padding: 15px 10px; /* Padding vertical mantido, horizontal reduzido/ajustado */
             border: none;
             border-radius: 5px;
-            font-size: 16px; /* Ajustado para melhor visualização em telas menores */
+            font-size: 16px;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block; /* Faz com que os botões se alinhem horizontalmente */
+            text-align: center; /* Centra o texto dentro do botão */
+
+            /* NOVO: Propriedades para uniformizar a largura em telas maiores */
+            flex-grow: 1; /* Permite que o botão cresça */
+            flex-basis: 0; /* Ponto de partida para o crescimento (garante que todos os botões têm a mesma largura disponível) */
+            max-width: 300px; /* Limita a largura máxima dos botões */
         }
+        
         .btn:hover {
-            background-color: #228B22; /* Cor de fundo do botão ao passar o mouse */
+            background-color: #228B22;
         }
 
-        /* Media Queries */
+        /* Media Queries - Melhorias para telemóveis */
         @media (max-width: 768px) {
             h1 {
-                font-size: 20px; /* Tamanho do título ajustado para telas menores */
+                font-size: 20px;
             }
             .btn {
-                padding: 12px 25px; /* Reduzido padding para dispositivos menores */
-                font-size: 14px; /* Ajustado para melhor visualização em telas menores */
+                padding: 12px 10px;
+                font-size: 14px;
+                /* Em ecrãs mais pequenos, os botões ocupam a sua própria linha */
+                flex-basis: 100%; 
+                max-width: 100%;
+            }
+            .button-container {
+                flex-direction: column; /* Empilha os botões verticalmente em ecrãs pequenos */
+                align-items: center; /* Centra os botões empilhados */
             }
         }
 
         @media (max-width: 480px) {
             h1 {
-                font-size: 18px; /* Tamanho do título ajustado para telas muito pequenas */
+                font-size: 18px;
             }
             .btn {
-                padding: 10px 20px; /* Reduzido padding para dispositivos muito pequenos */
-                font-size: 12px; /* Ajustado para melhor visualização em telas muito pequenas */
+                padding: 10px;
+                font-size: 12px;
             }
         }
     </style>
@@ -78,9 +97,8 @@
         <h1>EUCHNER Safety Services</h1>
 
         <div class="button-container">
-            <a href="RD1215Anex1.html" class="btn">Table Anexo 1</a>
             <a href="estudo_seguranca.html" class="btn">Safety Study</a>
-            <br> <a href="Safety_check.html" class="btn">Safety Check</a>
+            <a href="RD1215Anex1.html" class="btn">Table Anexo 1</a>
             <a href="Calc_distancias.html" class="btn">Cálculo Distâncias</a>
         </div>
     </div>
