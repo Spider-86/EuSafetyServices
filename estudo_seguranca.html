@@ -79,17 +79,24 @@
     .item textarea.descricao,
     .item select.S,
     .item select.F,
-    .item select.P {
+    .item select.P,
+    /* Novas Comboboxes */
+    .item select.perigo-tipo,
+    .item select.perigo-origem,
+    .item select.consequencia { 
         width: 100% !important;
     }
 }
 
 	.item select.S,
 	.item select.F,
-	.item select.P {
+	.item select.P,
+	/* Novas Comboboxes */
+	.item select.perigo-tipo,
+	.item select.perigo-origem,
+	.item select.consequencia {
     width: 250px; 
 	}
-
 
 
     textarea, input[type="text"], input[type="number"], select {
@@ -174,7 +181,7 @@
     <input type="file" accept="image/*" capture="camera" id="fotoCE">
 
     <label for="fotoGeral" id="lblGeral" class="inline">Foto Geral da Máquina:</label>
-    <input type="file" accept="image/*" capture="camera" id="fotoGeral">
+    <input type="file" accept="image/*" capture="camera" class="fotoGeral">
 </div>
 
 <div id="container"></div>
@@ -195,6 +202,98 @@ const textos = {
         ce: "Marcação CE da Máquina:",
         geral: "Foto Geral da Máquina:",
         descricao: "Descrição:",
+        // TIPO DE PERIGO
+        tipoPerigo: "Tipo de Perigo:",
+        perigos: [
+            "1. Perigos mecânicos",
+            "2. Perigos elétricos",
+            "3. Perigos térmicos",
+            "4. Perigos produzidos pelo ruído",
+            "5. Perigos produzidos pelas vibrações",
+            "6. Perigos produzidos pelas radiações",
+            "7. Perigos produzidos por materiais e substâncias utilizados pela máquina",
+            "8. Perigos produzidos por não respeitar os princípios da ergonomia",
+            "9. Perigos associados ao meio ambiente em que a máquina é utilizada",
+            "10. Combinação de perigos / situações perigosas",
+            "11. Perigos por falha/mau design de partes do sistema de comando relativas à segurança"
+        ],
+        // ORIGEM DO PERIGO (Lista detalhada e numerada para filtragem)
+        origemPerigo: "Origem do Perigo:",
+        origens: [
+            "1.1. Peças em movimento",
+            "1.2. Partes agudas",
+            "1.3. Partes salientes",
+            "1.4. Inserção (Energia cinética)",
+            "1.5. Fricção / Abrasão",
+            "1.6. Instabilidade (perda de estabilidade)",
+            "1.7. Elementos elásticos (elementos sob pressão)",
+            "1.8. Projeção de peças móveis ou material",
+            "1.9. Esmagamento / Corte",
+            "1.10. Aprisionamento / Enrolamento",
+            "1.11. Elementos rolantes (deslocamento)",
+            "1.12. Elementos cortantes",
+            "1.13. Elementos de cisalhamento",
+            "1.14. Astilhas, virutas, ângulos vivos, pelos salientes",
+            "1.15. Deslocamento inesperado (e.g. gravidade)",
+            "1.16. Rutura",
+            "1.17. Retardo durante o funcionamento",
+            "1.18. Diferença de tempo / espaço (mudanças de velocidade)",
+            "1.19. Impacto",
+            "1.20. Fenómeno eletromagnético",
+            "2.1. Contacto direto",
+            "2.2. Distância insuficiente a partes ativas, em alta tensão",
+            "2.3. Contacto indireto",
+            "2.4. Máquina com um só polo ativo, devido a uma falha",
+            "2.5. Curto-circuito",
+            "2.6. Descarga elétrica",
+            "2.7. Contacto com ar / água",
+            "2.8. Contacto elétrico indireto",
+            "2.9. Descarga estática",
+            "2.10. Tensão de falha elétrica",
+            "3.1. Exposição",
+            "3.2. Líquidos quentes",
+            "3.3. Contacto com temperaturas extremas (altas/baixas)",
+            "3.4. Radiação de fontes de calor",
+            "4.1. Exposição ao ruído",
+            "5.1. Máquina com movimento",
+            "6.1. Radiação ionizante",
+            "6.2. Radiação não ionizante",
+            "6.3. Laser",
+            "7.1. Pó, Fumo, Gás",
+            "7.2. Agente biológico e microbiológico (por vírus ou por bactérias)",
+            "7.3. Exposição a agentes patogénicos, etc.",
+            "7.4. Explosão",
+            "8.1. Postura",
+            "8.2. Esforço",
+            "8.3. Iluminação / sombras",
+            "9.1. Pressão / Vácuo",
+            "9.2. Fogo",
+            "9.3. Vento / Chuva",
+            "10.1. Falha de sistema de segurança",
+            "10.2. Componentes defeituosos",
+            "10.3. Design de software",
+            "11.1. Perigos hidráulicos",
+            "11.2. Perigos pneumáticos",
+            "11.3. Perigos de incêndio/explosão por falha elétrica",
+            "11.4. Perigos da máquina em si mesma",
+            "11.5. Perigos do meio ambiente",
+        ],
+        // NOVO: CONSEQUÊNCIAS
+        consequencia: "Consequência:",
+        consequencias: [
+            "Acúfenos", "Aplastamento", "Arrastamento ou aprisionamento", "Asfixia", "Queda, ser projetado", 
+            "Cancro", "Choque elétrico", "Cisalhamento", "Congelamento", "Corte ou seccionamento", 
+            "Corrosão", "Dano aos olhos e à pele", "Desidratação", "Dor de cabeça, insónia, etc", 
+            "Eletrocussão", "Enganche", "Envenenamento", "Efeitos em implantes médicos", "Efeitos químicos", 
+            "Efeitos sobre a capacidade de reprodução", "Escaldadura", "Estresse", "Explosão", "Fadiga", 
+            "Fricção ou abrasão", "Impacto", "Incêndio", "Infeção", "Insuficiência respiratória, asfixia", 
+            "Injeção", "Lesões por radiação de fontes de calor", "Ligeira indisposição", "Lombalgia", 
+            "Moléstia", "Mutação", "Perda do equilíbrio", "Perda de perceção", 
+            "Perda permanente da acuidade auditiva", "Picada/perfuração", "Projeção de partículas", 
+            "Queimadura", "Escorregadela, tropeção, queda", "Sensibilização", "Ser atropelado", 
+            "Ser projetado", "Transtorno musculoesquelético", "Transtorno neurológico", 
+            "Transtorno osteoarticular", "Transtorno vascular", "Traumatismo vertebral"
+        ],
         fotos: "Fotos",
         foto: "Foto",
         addFuncao: "Adicionar Ficha de Perigo",
@@ -210,6 +309,98 @@ const textos = {
         ce: "Marcado CE de la Máquina:",
         geral: "Foto General de la Máquina:",
         descricao: "Descripción:",
+        // TIPO DE PELIGRO
+        tipoPerigo: "Tipo de Peligro:",
+        perigos: [
+            "1. Peligros mecánicos",
+            "2. Peligros eléctricos",
+            "3. Peligros térmicos",
+            "4. Peligros producidos por el ruido",
+            "5. Peligros producidos por las vibraciones",
+            "6. Peligros producidos por las radiaciones",
+            "7. Peligros producidos por materiales y sustancias utilizados por la máquina",
+            "8. Peligros producidos por no respetar los principios de la ergonomía",
+            "9. Peligros asociados al medio ambiente en el que se utiliza la máquina",
+            "10. Combinación de peligros / situaciones peligrosas",
+            "11. Peligros por fallo/mal diseño de partes del sistema mando relativas a seguridad"
+        ],
+        // ORIGEN DEL PELIGRO (Lista detalhada e numerada para filtragem)
+        origemPerigo: "Origen del Peligro:",
+        origens: [
+            "1.1. Piezas en movimiento",
+            "1.2. Partes agudas",
+            "1.3. Partes salientes",
+            "1.4. Inserción (Energia cinética)",
+            "1.5. Fricción / abrasión",
+            "1.6. Inestabilidad",
+            "1.7. Elementos elásticos",
+            "1.8. Desprendimiento de parte movil o pieza/materia prima",
+            "1.9. Presión / vacio (fuerzas acumuladas)",
+            "1.10. Atrapamiento",
+            "1.11. Elementos rodantes (desplazamiento)",
+            "1.12. Elementos cortantes",
+            "1.13. Elementos cizallantes",
+            "1.14. Astillas, virutas, ángulos vivos, pelos salientes",
+            "1.15. Desplazamiento inesperado (e.g. gravedad)",
+            "1.16. Ruptura",
+            "1.17. Retardo durante el funcionamiento",
+            "1.18. Diferencia de tiempo / espacio (cambios velocidad)",
+            "1.19. Impacto",
+            "1.20. Fenómeno electromagnético",
+            "2.1. Contacto directo",
+            "2.2. Distancia insuficiente a partes activas, en alta tensión",
+            "2.3. Contacto indirecto",
+            "2.4. Máquina con un solo hecho activa, a causa de un fallo",
+            "2.5. Cortocircuito",
+            "2.6. Descarga electrica",
+            "2.7. Contacto con aire / agua",
+            "2.8. Contacto electrico indirecto",
+            "2.9. Descarga estática",
+            "2.10. Tension de fallo electrico",
+            "3.1. Exposición",
+            "3.2. Líquidos calientes",
+            "3.3. Peligro de contacto con temperaturas extremas/ altas/bajas",
+            "3.4. Radiación de fuentes de calor",
+            "4.1. Exposición al ruido",
+            "5.1. Máquina con movimiento",
+            "6.1. Radiación ionizante",
+            "6.2. Radiación no ionizante",
+            "6.3. Láser",
+            "7.1. Polvo, Humo, Gas",
+            "7.2. Agente biológico y microbiológico (por virus o por bacterias)",
+            "7.3. Exposición a agentes patógenos, etc.",
+            "7.4. Explosión",
+            "8.1. Postura",
+            "8.2. Esfuerzo",
+            "8.3. Iluminación / sombras",
+            "9.1. Presión / vacio",
+            "9.2. Fuego",
+            "9.3. Viento / lluvia",
+            "10.1. Fallo de sistema de seguridad",
+            "10.2. Componentes defectuosos",
+            "10.3. Diseño de software",
+            "11.1. Perigos hidráulicos",
+            "11.2. Perigos neumáticos",
+            "11.3. Perigos de incendio/explosión por fallo eléctrico",
+            "11.4. Perigos de la máquina en si misma",
+            "11.5. Perigos del medio ambiente",
+        ],
+        // NOVO: CONSEQUÊNCIAS
+        consequencia: "Consecuencia:",
+        consequencias: [
+            "Acúfenos", "Aplastamiento", "Arrastre o atrapamiento", "Asfixia", "Caída, ser proyectado", 
+            "Cáncer", "Choque eléctrico", "Cizallamiento", "Congelación", "Corte o seccionamiento", 
+            "Corrosión", "Daño a los ojos y a la piel", "Deshidratación", "Dolor de cabeza, insomnio, etc", 
+            "Electrocución", "Enganche", "Envenenamiento", "Efectos en implantes médicos", "Efectos químicos", 
+            "Efectos sobre la capacidad de reproducción", "Escaldadura", "Estrés", "Explosión", 
+            "Fatiga", "Fricción o abrasión", "Impacto", "Incendio", "Infección", 
+            "Insuficiencia respiratoria, asfixia", "Inyección", "Lesiones por la radiación de fuentes de calor", 
+            "Ligera indisposición", "Lumbalgia", "Molestia", "Mutación", "Pérdida del equilibrio", 
+            "Pérdida de percepción", "Pérdida permanente de la agudeza auditiva", "Pinchazo/perforación", 
+            "Proyección de partículas", "Quemadura", "Resbalón, tropezón, caída", "Sensibilización", 
+            "Ser atropellado", "Ser proyectado", "Trastorno músculo esquelético", "Trastorno neurológico", 
+            "Trastorno osteo-articular", "Trastorno vascular", "Traumatismo vertebral"
+        ],
         fotos: "Fotos",
         foto: "Foto",
         addFuncao: "Añadir Ficha de Peligro",
@@ -225,6 +416,98 @@ const textos = {
         ce: "Machine CE Marking:",
         geral: "General Machine Photo:",
         descricao: "Description:",
+        // TYPE OF HAZARD
+        tipoPerigo: "Type of Hazard:",
+        perigos: [
+            "1. Mechanical hazards",
+            "2. Electrical hazards",
+            "3. Thermal hazards",
+            "4. Hazards generated by noise",
+            "5. Hazards generated by vibration",
+            "6. Hazards generated by radiation",
+            "7. Hazards generated by materials and substances used by the machine",
+            "8. Hazards generated by not respecting ergonomic principles",
+            "9. Hazards associated with the environment in which the machine is used",
+            "10. Combination of hazards / dangerous situations",
+            "11. Hazards due to failure/poor design of safety-related parts of the control system"
+        ],
+        // HAZARD ORIGIN (Detailed and numbered list for filtering)
+        origemPerigo: "Hazard Origin:",
+        origens: [
+            "1.1. Moving parts",
+            "1.2. Sharp parts",
+            "1.3. Protruding parts",
+            "1.4. Insertion (Kinetic Energy)",
+            "1.5. Friction / Abrasion",
+            "1.6. Instability (loss of stability)",
+            "1.7. Elastic elements (elements under pressure)",
+            "1.8. Ejection of moving parts or material",
+            "1.9. Crushing / Cutting",
+            "1.10. Entrapment / Winding",
+            "1.11. Rolling elements (displacement)",
+            "1.12. Cutting elements",
+            "1.13. Shearing elements",
+            "1.14. Splinters, chips, sharp angles, protruding hairs",
+            "1.15. Unexpected displacement (e.g. gravity)",
+            "1.16. Rupture",
+            "1.17. Delay during operation",
+            "1.18. Time / space difference (speed changes)",
+            "1.19. Impact",
+            "1.20. Electromagnetic phenomenon",
+            "2.1. Direct contact",
+            "2.2. Insufficient distance to live parts, high voltage",
+            "2.3. Indirect contact",
+            "2.4. Machine with only one active pole, due to a fault",
+            "2.5. Short circuit",
+            "2.6. Electric shock",
+            "2.7. Contact with air / water",
+            "2.8. Indirect electric contact",
+            "2.9. Static discharge",
+            "2.10. Electric fault voltage",
+            "3.1. Exposure",
+            "3.2. Hot liquids",
+            "3.3. Contact with extreme temperatures (high/low)",
+            "3.4. Radiation from heat sources",
+            "4.1. Noise exposure",
+            "5.1. Machine with movement",
+            "6.1. Ionizing radiation",
+            "6.2. Non-ionizing radiation",
+            "6.3. Laser",
+            "7.1. Dust, Smoke, Gas",
+            "7.2. Biological and microbiological agent (by virus or bacteria)",
+            "7.3. Exposure to pathogenic agents, etc.",
+            "7.4. Explosion",
+            "8.1. Posture",
+            "8.2. Effort",
+            "8.3. Ilumination / shadows",
+            "9.1. Pressure / Vacuum",
+            "9.2. Fire",
+            "9.3. Wind / Rain",
+            "10.1. Safety system failure",
+            "10.2. Defective components",
+            "10.3. Software design",
+            "11.1. Hydraulic hazards",
+            "11.2. Pneumatic hazards",
+            "11.3. Fire/explosion hazards due to electrical failure",
+            "11.4. Machine hazards itself",
+            "11.5. Environmental hazards",
+        ],
+        // NOVO: CONSEQUÊNCIAS
+        consequencia: "Consequence:",
+        consequencias: [
+            "Tinnitus", "Crushing", "Dragging or entrapment", "Asphyxia", "Fall, being projected", 
+            "Cancer", "Electric shock", "Shearing", "Freezing", "Cut or sectioning", 
+            "Corrosion", "Damage to eyes and skin", "Dehydration", "Headache, insomnia, etc", 
+            "Electrocution", "Snagging", "Poisoning", "Effects on medical implants", "Chemical effects", 
+            "Effects on reproductive capacity", "Scalding", "Stress", "Explosion", 
+            "Fatigue", "Friction or abrasion", "Impact", "Fire", "Infection", 
+            "Respiratory failure, asphyxia", "Injection", "Injuries from radiation from heat sources", 
+            "Slight indisposition", "Low back pain", "Nuisance", "Mutation", "Loss of balance", 
+            "Loss of perception", "Permanent loss of hearing acuity", "Puncture/perforation", 
+            "Projection of particles", "Burn", "Slip, trip, fall", "Sensitization", 
+            "Being run over", "Being projected", "Musculoskeletal disorder", "Neurological disorder", 
+            "Osteo-articular disorder", "Vascular disorder", "Vertebral trauma"
+        ],
         fotos: "Photos",
         foto: "Photo",
         addFuncao: "Add Hazard Sheet",
@@ -234,6 +517,50 @@ const textos = {
 };
 
 let contador = 0;
+
+/* FUNÇÃO: Gera as opções da combobox */
+function gerarOpcoes(lista) {
+    let options = '<option value="">-- Selecionar --</option>'; 
+    lista.forEach((item) => {
+        options += `<option value="${item}">${item}</option>`;
+    });
+    return options;
+}
+
+/**
+ * Função principal para filtrar as opções de Origem do Perigo
+ * com base na seleção do Tipo de Perigo.
+ */
+function filtrarOpcoesOrigem(itemDiv) {
+    const lang = document.getElementById("langSelect").value;
+    const t = textos[lang];
+    const tipoSelect = itemDiv.querySelector('.perigo-tipo');
+    const origemSelect = itemDiv.querySelector('.perigo-origem');
+    
+    const selectedTipo = tipoSelect.value; 
+    const match = selectedTipo.match(/^(\d+)\./);
+    const prefix = match ? match[1] + '.' : ''; 
+
+    const todasOrigens = t.origens;
+    let filteredOrigens = [];
+
+    if (prefix) {
+        filteredOrigens = todasOrigens.filter(origem => origem.startsWith(prefix));
+    }
+    
+    const newOptionsHTML = gerarOpcoes(filteredOrigens); 
+
+    origemSelect.innerHTML = newOptionsHTML;
+
+    // Tentar restaurar o valor previamente selecionado, se ainda for válido
+    const selectedOrigem = itemDiv.getAttribute('data-origem-value');
+    if (selectedOrigem && filteredOrigens.includes(selectedOrigem)) {
+        origemSelect.value = selectedOrigem;
+    } else {
+        itemDiv.removeAttribute('data-origem-value');
+    }
+}
+
 
 /* ---- IDIOMA ---- */
 function atualizarIdioma() {
@@ -250,13 +577,37 @@ function atualizarIdioma() {
 
     document.getElementById("btnAdd").innerText = t.addFuncao;
     document.getElementById("btnPDF").innerText = t.gerarPDF;
+    
+    const perigoOptions = gerarOpcoes(t.perigos);
+    const consequenciaOptions = gerarOpcoes(t.consequencias); // NOVO
 
     // atualizar itens existentes
     document.querySelectorAll(".item").forEach((item, idx) => {
         item.querySelector(".hFuncao").innerText = `${t.funcao} ${idx+1}`;
         item.querySelector(".lblDescricao").innerText = t.descricao;
+        
+        // Tipo de Perigo
+        item.querySelector(".lblPerigo").innerText = t.tipoPerigo;
+        item.querySelector(".perigo-tipo").innerHTML = perigoOptions; 
+        const selectedPerigo = item.getAttribute('data-perigo-value');
+        if (selectedPerigo) {
+            item.querySelector(".perigo-tipo").value = selectedPerigo;
+        }
+        
+        // Origem do Perigo
+        item.querySelector(".lblOrigem").innerText = t.origemPerigo;
+        // Chamar o filtro para regenerar as opções de origem no novo idioma/seleção
+        filtrarOpcoesOrigem(item); 
+        
+        // Consequência (NOVO)
+        item.querySelector(".lblConsequencia").innerText = t.consequencia;
+        item.querySelector(".consequencia").innerHTML = consequenciaOptions; 
+        const selectedConsequencia = item.getAttribute('data-consequencia-value');
+        if (selectedConsequencia) {
+            item.querySelector(".consequencia").value = selectedConsequencia;
+        }
+
         item.querySelector(".lblFotos").innerText = t.fotos;
-        // Assegurar que só as fotos 1 e 2 são atualizadas, removendo a referência à foto 3
         const fotosLabels = item.querySelectorAll(".lblFoto");
         if(fotosLabels.length >= 1) fotosLabels[0].innerText = `${t.foto} 1:`;
         if(fotosLabels.length >= 2) fotosLabels[1].innerText = `${t.foto} 2:`;
@@ -268,16 +619,46 @@ function addItem() {
     contador++;
     const lang = document.getElementById("langSelect").value;
     const t = textos[lang];
+    
+    const perigoOptions = gerarOpcoes(t.perigos);
+    const consequenciaOptions = gerarOpcoes(t.consequencias); // NOVO
 
     const div = document.createElement("div");
     div.className = "item";
+    
+    // Escuta de evento para guardar o valor selecionado E filtrar a segunda combobox
+    div.addEventListener('change', function(e) {
+        if (e.target.classList.contains('perigo-tipo')) {
+            div.setAttribute('data-perigo-value', e.target.value);
+            // 1. Filtrar as opções de origem
+            filtrarOpcoesOrigem(div); 
+            // 2. Limpar a origem selecionada, pois o tipo mudou
+            div.removeAttribute('data-origem-value');
+        }
+        if (e.target.classList.contains('perigo-origem')) {
+            div.setAttribute('data-origem-value', e.target.value);
+        }
+        if (e.target.classList.contains('consequencia')) { // NOVO listener
+            div.setAttribute('data-consequencia-value', e.target.value);
+        }
+    });
+
 
     div.innerHTML = `
         <h3 class="hFuncao">${t.funcao} ${contador}</h3>
 
         <label class="lblDescricao">${t.descricao}</label>
         <textarea class="descricao" rows="3"></textarea>
+        
+        <label class="lblPerigo">${t.tipoPerigo}</label>
+        <select class="perigo-tipo">${perigoOptions}</select>
 
+        <label class="lblOrigem">${t.origemPerigo}</label>
+        <select class="perigo-origem"><option value="">-- Selecionar --</option></select>
+        
+        <label class="lblConsequencia">${t.consequencia}</label>
+        <select class="consequencia">${consequenciaOptions}</select>
+        
         <label class="lblFotos">${t.fotos}</label>
         <label class="lblFoto">${t.foto} 1:</label>
         <input type="file" accept="image/*" capture="camera" class="foto1">
@@ -287,11 +668,14 @@ function addItem() {
         `;
 
     document.getElementById("container").appendChild(div);
+    
+    // Assegurar que a combobox de Origem do Perigo está vazia inicialmente
+    filtrarOpcoesOrigem(div);
 }
 
 
 // ----------------------------------------------------------------------
-// NOVAS FUNÇÕES PARA CORRIGIR A ORIENTAÇÃO DA IMAGEM (EXIF) - V3
+// FUNÇÕES DE IMAGEM E PDF 
 // ----------------------------------------------------------------------
 
 // Função que lê a orientação EXIF do ficheiro (buffer)
@@ -300,7 +684,7 @@ function getOrientation(file) {
         const reader = new FileReader();
         reader.onload = function(e) {
             const view = new DataView(e.target.result);
-            if (view.getUint16(0, false) != 0xFFD8) return resolve(1); // Não é JPEG
+            if (view.getUint16(0, false) != 0xFFD8) return resolve(1); 
 
             const length = view.byteLength;
             let offset = 2;
@@ -331,7 +715,6 @@ function getOrientation(file) {
             }
             return resolve(1); 
         };
-        // Lê apenas o início do ficheiro onde está o EXIF
         reader.readAsArrayBuffer(file.slice(0, 65536)); 
     });
 }
@@ -340,7 +723,6 @@ function getOrientation(file) {
 async function rotateImage(file) {
     const orientation = await getOrientation(file);
     if (orientation === 1) {
-        // Se a orientação for normal (1), lê-se o ficheiro diretamente
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onload = (e) => resolve(e.target.result);
@@ -349,7 +731,6 @@ async function rotateImage(file) {
         });
     }
 
-    // Se a orientação não for normal, faz-se a correção
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -360,7 +741,6 @@ async function rotateImage(file) {
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
 
-                // Aplicar transformações
                 switch (orientation) {
                     case 5:
                     case 6:
@@ -368,28 +748,25 @@ async function rotateImage(file) {
                     case 8:
                         canvas.width = height;
                         canvas.height = width;
-                        [width, height] = [height, width]; // Troca as dimensões para os casos 5-8
+                        [width, height] = [height, width]; 
                         break;
                     default:
                         canvas.width = width;
                         canvas.height = height;
                 }
                 
-                // Matrizes de transformação detalhadas
                 switch (orientation) {
                     case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
                     case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
                     case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
                     case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
-                    case 6: ctx.transform(0, 1, -1, 0, width, 0); break; // Rotação 90 CW
+                    case 6: ctx.transform(0, 1, -1, 0, width, 0); break; 
                     case 7: ctx.transform(0, -1, -1, 0, width, height); break;
-                    case 8: ctx.transform(0, -1, 1, 0, 0, height); break; // Rotação 270 CW
+                    case 8: ctx.transform(0, -1, 1, 0, 0, height); break; 
                     default: break;
                 }
 
                 ctx.drawImage(img, 0, 0);
-
-                // Retornar o Data URL corrigido (JPEG)
                 resolve(canvas.toDataURL('image/jpeg', 0.9));
             };
             img.src = e.target.result;
@@ -398,12 +775,10 @@ async function rotateImage(file) {
     });
 }
 
-/* ---- util: File -> dataURL (MODIFICADA para usar a nova função de correção) ---- */
+/* ---- util: File -> dataURL ---- */
 async function fileToDataURL(file){
-    // Utiliza a função assíncrona para obter o Data URL já corrigido
     return await rotateImage(file);
 }
-// Fim das modificações
 
 /* ---- adicionar imagem ao PDF dimensionada ---- */
 async function addImageFullSize(doc, dataUrl, x, y, maxW = 180, maxH = 120){
@@ -417,7 +792,6 @@ async function addImageFullSize(doc, dataUrl, x, y, maxW = 180, maxH = 120){
                 const r = Math.min(maxW/w, maxH/h);
                 w *= r; h *= r;
             }
-            // Adicionar a imagem corrigida ao PDF
             doc.addImage(dataUrl, 'JPEG', x, y, w, h);
             resolve(h + 8);
         };
@@ -453,30 +827,62 @@ async function gerarPDF(){
     }
 
     // TITULO E DADOS DO ESTUDO
+    
+    // Título: Informação do Estudo
     doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
     doc.setTextColor(0);
-    doc.text(t.studyTitle, 10, y); y += 8;
+    doc.text(t.studyTitle, 10, y); 
+    y += 8;
     doc.setFontSize(11);
-    doc.text(`${t.cliente} ${document.getElementById('cliente').value || ''}`, 10, y); y+=6;
-    doc.text(`${t.maquina} ${document.getElementById('maquina').value || ''}`, 10, y); y+=6;
-    doc.text(`${t.ano} ${document.getElementById('ano').value || ''}`, 10, y); y+=8;
+    doc.setFont('helvetica', 'normal');
+
+    // 1. Cliente
+    const clienteValue = document.getElementById('cliente').value || '';
+    const clienteLabel = t.cliente + (t.cliente.endsWith(':') ? ' ' : ': ');
+    doc.setFont('helvetica', 'bold');
+    let clienteLabelWidth = doc.getTextWidth(clienteLabel);
+    doc.text(clienteLabel, 10, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(clienteValue, 10 + clienteLabelWidth, y);
+    y += 6;
+    
+    // 2. Nome e Modelo da Máquina
+    const maquinaValue = document.getElementById('maquina').value || '';
+    const maquinaLabel = t.maquina + (t.maquina.endsWith(':') ? ' ' : ': ');
+    doc.setFont('helvetica', 'bold');
+    let maquinaLabelWidth = doc.getTextWidth(maquinaLabel);
+    doc.text(maquinaLabel, 10, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(maquinaValue, 10 + maquinaLabelWidth, y);
+    y += 6;
+    
+    // 3. Ano de Fabrico
+    const anoValue = document.getElementById('ano').value || '';
+    const anoLabel = t.ano + (t.ano.endsWith(':') ? ' ' : ': ');
+    doc.setFont('helvetica', 'bold');
+    let anoLabelWidth = doc.getTextWidth(anoLabel);
+    doc.text(anoLabel, 10, y);
+    doc.setFont('helvetica', 'normal');
+    doc.text(anoValue, 10 + anoLabelWidth, y);
+    y += 8;
 
     // FOTOS DO ESTUDO (CE + GERAL)
     const fotoCEFile = document.getElementById('fotoCE').files[0];
     if(fotoCEFile){
         doc.setFontSize(11);
         doc.text(t.ce, 10, y); y+=6;
-        const dataUrl = await fileToDataURL(fotoCEFile); // Usa a função corrigida
+        const dataUrl = await fileToDataURL(fotoCEFile); 
         const h = await addImageFullSize(doc, dataUrl, 10, y, 90, 80);
         y += h;
     }
 
-    const fotoGeralFile = document.getElementById('fotoGeral').files[0];
+    const fotoGeralFile = document.querySelector('.fotoGeral').files[0];
     if(fotoGeralFile){
         if(y > 250){ doc.addPage(); y = 12; }
         doc.setFontSize(11);
         doc.text(t.geral, 10, y); y+=6;
-        const dataUrl = await fileToDataURL(fotoGeralFile); // Usa a função corrigida
+        const dataUrl = await fileToDataURL(fotoGeralFile); 
         const h = await addImageFullSize(doc, dataUrl, 10, y, 180, 120);
         y += h;
     }
@@ -492,13 +898,67 @@ async function gerarPDF(){
 
     for(let i=0;i<items.length;i++){
         const item = items[i];
+        
+        // Título da Ficha de Perigo
         doc.setFontSize(13);
-        doc.text(`${t.funcao} ${i+1}`, 10, y); y += 7;
+        doc.setFont('helvetica', 'bold');
+        doc.text(`${t.funcao} ${i+1}`, 10, y); 
+        y += 7;
+        
+        // Reset para o texto normal (Valor)
         doc.setFontSize(11);
-        const desc = item.querySelector('.descricao').value || '';
-        doc.text(`${t.descricao} ${desc}`, 10, y); y += 8; // Ajuste no espaçamento após remover PL
+        doc.setFont('helvetica', 'normal');
 
-        // Atualização para considerar apenas as fotos 1 e 2
+        // 1. Descrição
+        const desc = item.querySelector('.descricao').value || '';
+        const descLabel = t.descricao + (t.descricao.endsWith(':') ? ' ' : ': ');
+        doc.setFont('helvetica', 'bold');
+        const descLabelWidth = doc.getTextWidth(descLabel); 
+        doc.text(descLabel, 10, y);
+        doc.setFont('helvetica', 'normal');
+        doc.text(desc, 10 + descLabelWidth, y);
+        y += 6; 
+        
+        // 2. Tipo de Perigo
+        const tipoPerigo = item.querySelector('.perigo-tipo')?.value || '';
+        if (tipoPerigo) {
+            const tipoLabel = t.tipoPerigo + (t.tipoPerigo.endsWith(':') ? ' ' : ': ');
+            doc.setFont('helvetica', 'bold');
+            const tipoLabelWidth = doc.getTextWidth(tipoLabel);
+            doc.text(tipoLabel, 10, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(tipoPerigo, 10 + tipoLabelWidth, y);
+            y += 6;
+        }
+
+        // 3. Origem do Perigo
+        const origemPerigo = item.querySelector('.perigo-origem')?.value || '';
+        if (origemPerigo) {
+            const origemLabel = t.origemPerigo + (t.origemPerigo.endsWith(':') ? ' ' : ': ');
+            doc.setFont('helvetica', 'bold');
+            const origemLabelWidth = doc.getTextWidth(origemLabel);
+            doc.text(origemLabel, 10, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(origemPerigo, 10 + origemLabelWidth, y);
+            y += 6; 
+        }
+
+        // 4. Consequência
+        const consequencia = item.querySelector('.consequencia')?.value || '';
+        if (consequencia) {
+            const consLabel = t.consequencia + (t.consequencia.endsWith(':') ? ' ' : ': ');
+            doc.setFont('helvetica', 'bold');
+            const consLabelWidth = doc.getTextWidth(consLabel);
+            doc.text(consLabel, 10, y);
+            doc.setFont('helvetica', 'normal');
+            doc.text(consequencia, 10 + consLabelWidth, y);
+            y += 8; 
+        } else {
+             y += 2;
+        }
+        
+        
+        // Fotos
         const fotos = [
             item.querySelector('.foto1')?.files?.[0],
             item.querySelector('.foto2')?.files?.[0]
@@ -506,7 +966,7 @@ async function gerarPDF(){
 
         for(const f of fotos){
             if(y > 220){ doc.addPage(); y = 12; }
-            const dataUrl = await fileToDataURL(f); // Usa a função corrigida
+            const dataUrl = await fileToDataURL(f); 
             const h = await addImageFullSize(doc, dataUrl, 10, y, 180, 120);
             y += h;
         }
