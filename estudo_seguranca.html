@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>teste paulo rocha</title>
+<title>Estudo de Segurança</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
     body {
@@ -159,7 +159,7 @@
 </div>
 
 <div class="study-box">
-    <h3 id="studyTitle">Relatório Estudo de Segurnça</h3>
+    <h3 id="studyTitle">teste teste teste teste</h3>
 
     <label for="cliente" id="lblCliente" class="inline">Cliente:</label>
     <input type="text" id="cliente" maxlength="60" placeholder="Nome do cliente">
@@ -291,117 +291,117 @@ function addItem() {
 
 
 // ----------------------------------------------------------------------
-// NOVAS FUNÇÕES MELHORADAS PARA CORRIGIR A ORIENTAÇÃO DA IMAGEM (EXIF)
+// NOVAS FUNÇÕES PARA CORRIGIR A ORIENTAÇÃO DA IMAGEM (EXIF) - V3
 // ----------------------------------------------------------------------
 
-// Função para ler o valor de orientação EXIF (Mais simples e focado no valor)
-function getOrientation(file, callback) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const view = new DataView(e.target.result);
-        if (view.getUint16(0, false) != 0xFFD8) return callback(1); 
+// Função que lê a orientação EXIF do ficheiro (buffer)
+function getOrientation(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const view = new DataView(e.target.result);
+            if (view.getUint16(0, false) != 0xFFD8) return resolve(1); // Não é JPEG
 
-        const length = view.byteLength;
-        let offset = 2;
+            const length = view.byteLength;
+            let offset = 2;
 
-        while (offset < length) {
-            const marker = view.getUint16(offset, false);
-            offset += 2;
-
-            if (marker == 0xFFE1) {
-                // APP1 (EXIF)
-                if (view.getUint32(offset += 2, false) != 0x45786966) return callback(1); 
-
-                const tiffOffset = offset + 6;
-                const littleEndian = view.getUint16(tiffOffset) == 0x4949;
-                offset = view.getUint32(tiffOffset + 4, littleEndian) + tiffOffset;
-                const entries = view.getUint16(offset, littleEndian);
+            while (offset < length) {
+                const marker = view.getUint16(offset, false);
                 offset += 2;
 
-                for (let i = 0; i < entries; i++) {
-                    if (view.getUint16(offset + (i * 12), littleEndian) == 0x0112) {
-                        return callback(view.getUint16(offset + (i * 12) + 8, littleEndian));
+                if (marker == 0xFFE1) {
+                    if (view.getUint32(offset += 2, false) != 0x45786966) return resolve(1);
+                    
+                    const tiffOffset = offset + 6;
+                    const littleEndian = view.getUint16(tiffOffset) == 0x4949;
+                    offset = view.getUint32(tiffOffset + 4, littleEndian) + tiffOffset;
+                    const entries = view.getUint16(offset, littleEndian);
+                    offset += 2;
+
+                    for (let i = 0; i < entries; i++) {
+                        if (view.getUint16(offset + (i * 12), littleEndian) == 0x0112) {
+                            return resolve(view.getUint16(offset + (i * 12) + 8, littleEndian));
+                        }
                     }
+                } else if ((marker & 0xFF00) != 0xFF00) {
+                    break;
+                } else {
+                    offset += view.getUint16(offset, false);
                 }
-            } else if ((marker & 0xFF00) != 0xFF00) {
-                break;
-            } else {
-                offset += view.getUint16(offset, false);
             }
-        }
-        return callback(1); // Orientação padrão (1) se não for encontrada
-    };
-    reader.readAsArrayBuffer(file.slice(0, 65536));
+            return resolve(1); 
+        };
+        // Lê apenas o início do ficheiro onde está o EXIF
+        reader.readAsArrayBuffer(file.slice(0, 65536)); 
+    });
 }
 
-// Função para aplicar a correção de orientação via Canvas e retornar o Data URL
-function fixPhotoOrientation(file, callback) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const srcBase64 = e.target.result;
-        getOrientation(file, (orientation) => {
-            if (orientation === 1) {
-                return callback(srcBase64); // Sem correção
-            }
+// Função que aplica a rotação no Canvas e retorna o Data URL corrigido
+async function rotateImage(file) {
+    const orientation = await getOrientation(file);
+    if (orientation === 1) {
+        // Se a orientação for normal (1), lê-se o ficheiro diretamente
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
 
+    // Se a orientação não for normal, faz-se a correção
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
-                const width = img.width;
-                const height = img.height;
+                let width = img.width;
+                let height = img.height;
                 const canvas = document.createElement('canvas');
                 const ctx = canvas.getContext('2d');
 
-                // Aplicar correção de orientação
+                // Aplicar transformações
                 switch (orientation) {
-                    case 2: // Horizontal flip
-                        canvas.width = width; canvas.height = height;
-                        ctx.translate(width, 0); ctx.scale(-1, 1);
-                        break;
-                    case 3: // 180° rotation
-                        canvas.width = width; canvas.height = height;
-                        ctx.translate(width, height); ctx.rotate(Math.PI);
-                        break;
-                    case 4: // Vertical flip
-                        canvas.width = width; canvas.height = height;
-                        ctx.translate(0, height); ctx.scale(1, -1);
-                        break;
-                    case 5: // Transpose: 90° CW and horizontal flip
-                        canvas.width = height; canvas.height = width;
-                        ctx.rotate(Math.PI / 2); ctx.scale(1, -1);
-                        break;
-                    case 6: // 90° CW rotation
-                        canvas.width = height; canvas.height = width;
-                        ctx.rotate(Math.PI / 2); ctx.translate(0, -height);
-                        break;
-                    case 7: // Transverse: 90° CW and vertical flip
-                        canvas.width = height; canvas.height = width;
-                        ctx.rotate(Math.PI / 2); ctx.translate(width, -height);
-                        ctx.scale(-1, 1);
-                        break;
-                    case 8: // 270° CW rotation (ou -90° CW)
-                        canvas.width = height; canvas.height = width;
-                        ctx.rotate(-Math.PI / 2); ctx.translate(-width, 0);
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                        canvas.width = height;
+                        canvas.height = width;
+                        [width, height] = [height, width]; // Troca as dimensões para os casos 5-8
                         break;
                     default:
-                        canvas.width = width; canvas.height = height;
+                        canvas.width = width;
+                        canvas.height = height;
+                }
+                
+                // Matrizes de transformação detalhadas
+                switch (orientation) {
+                    case 2: ctx.transform(-1, 0, 0, 1, width, 0); break;
+                    case 3: ctx.transform(-1, 0, 0, -1, width, height); break;
+                    case 4: ctx.transform(1, 0, 0, -1, 0, height); break;
+                    case 5: ctx.transform(0, 1, 1, 0, 0, 0); break;
+                    case 6: ctx.transform(0, 1, -1, 0, width, 0); break; // Rotação 90 CW
+                    case 7: ctx.transform(0, -1, -1, 0, width, height); break;
+                    case 8: ctx.transform(0, -1, 1, 0, 0, height); break; // Rotação 270 CW
+                    default: break;
                 }
 
                 ctx.drawImage(img, 0, 0);
 
-                // Retornar o Data URL corrigido (JPEG de qualidade 90%)
-                callback(canvas.toDataURL('image/jpeg', 0.9));
+                // Retornar o Data URL corrigido (JPEG)
+                resolve(canvas.toDataURL('image/jpeg', 0.9));
             };
-            img.src = srcBase64;
-        });
-    };
-    reader.readAsDataURL(file);
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
 }
 
 /* ---- util: File -> dataURL (MODIFICADA para usar a nova função de correção) ---- */
-function fileToDataURL(file){
-    return new Promise((res, rej)=>{
-        fixPhotoOrientation(file, res);
-    });
+async function fileToDataURL(file){
+    // Utiliza a função assíncrona para obter o Data URL já corrigido
+    return await rotateImage(file);
 }
 // Fim das modificações
 
